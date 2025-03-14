@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "title": "French Learning",
+        "author": "Haris Rindh",
+        "cover": "img/WILL-AND-SQUILL.jpg",
+        "downloadLink": "https://drive.google.com/file/d/1kj77Woh4zT_7sFCAKYvNJ36o7cOoReQa/view?usp=sharing",
+        "category": "German"
+    },
+    {
+        "id": 2,
+        "title": "Success Route",
+        "author": "Haris Rindh",
+        "cover": "img/img1.jpg",
+        "downloadLink": "https://drive.google.com/file/d/1QBKVuy-jh5yGkTCFrVVm8wkvoY5qpg57/view?usp=sharing",
+        "category": "Self-Help"
+    },
+    {
+        "id": 3,
+        "title": "German",
+        "author": "Haris Rindh",
+        "cover": "img/blog (1).jpg",
+        "downloadLink": "https://drive.google.com/file/d/1cMtJafIzfC5wnbn5QZ7MfTOlj3nXILRT/view?usp=drivesdk",
+        "category": "German"
+    },
+    {
+        "id": 4,
+        "title": "Skills",
+        "author": "Haris Rindh",
+        "cover": "img/blog (2).jpg",
+        "downloadLink": "https://drive.google.com/file/d/1wB7DrQ_PyL5epz2c1onUQlA2jFe1FuEU/view?usp=sharing",
+        "category": "Self-Help"
+    },
+    {
+        "id": 5,
+        "title": "Gateway",
+        "author": "Haris Rindh",
+        "cover": "img/book.png",
+        "downloadLink": "https://drive.google.com/file/d/1PSKEQzQZYzHDvY0kuPYisS_zhA5BTkzX/view?usp=sharing",
+        "category": "German"
+    },
+    {
+        "id": 6,
+        "title": "MindSet",
+        "author": "Haris Rindh",
+        "cover": "img/contact.avif",
+        "downloadLink": "https://drive.google.com/file/d/13yKsWU0I6FMipssJ3EFdxK1ve_1jNWoZ/view?usp=sharing",
+        "category": "Self-Help"
+    }
+]
