@@ -99,9 +99,53 @@ function shareBook(bookId) {
     }
 }
 
+// Load and render the PDF
+let pdfCurrentPage = 1; // Track the current page
+let pdfDoc = null; // Store the PDF document
+
 function loadPdf(pdfUrl) {
-    // Open the PDF in a new tab
-    window.open(pdfUrl, '_blank');
+    // Reset pdfCurrentPage to 1 when loading a new PDF
+    pdfCurrentPage = 1;
+
+    // Convert Google Drive link to direct download link
+    const fileId = pdfUrl.match(/[-\w]{25,}/); // Extract file ID from the URL
+    const directPdfUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+
+    // Fetch the PDF from the direct Google Drive link
+    fetch(directPdfUrl)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch PDF.');
+            }
+            return response.blob();
+        })
+        .then((blob) => {
+            const fileReader = new FileReader();
+            fileReader.onload = function () {
+                const typedArray = new Uint8Array(this.result);
+                // Load the PDF using PDF.js
+                pdfjsLib.getDocument(typedArray).promise
+                    .then((pdf) => {
+                        pdfDoc = pdf;
+                        renderPage(pdfCurrentPage);
+
+                        // Show the PDF viewer
+                        const pdfViewer = document.getElementById('pdf-viewer');
+                        if (pdfViewer) {
+                            pdfViewer.style.display = 'block';
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error loading PDF:', error);
+                        alert('Failed to load the PDF. Please try again.');
+                    });
+            };
+            fileReader.readAsArrayBuffer(blob);
+        })
+        .catch((error) => {
+            console.error('Error fetching PDF:', error);
+            alert('Failed to fetch the PDF. Please try again.');
+        });
 }
 
 // Render a specific page of the PDF
