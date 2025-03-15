@@ -99,10 +99,12 @@ function shareBook(bookId) {
     }
 }
 
-// Load and render the PDF
-let pdfCurrentPage = 1; // Changed from currentPage
-let pdfDoc = null;
+function loadPdf(pdfUrl) {
+    // Open the PDF in a new tab
+    window.open(pdfUrl, '_blank');
+}
 
+// Render a specific page of the PDF
 function renderPage(pageNum) {
     pdfDoc.getPage(pageNum).then((page) => {
         const canvas = document.getElementById('pdf-canvas');
@@ -136,25 +138,6 @@ function renderPage(pageNum) {
     });
 }
 
-function loadPdf(pdfUrl) {
-    // Reset pdfCurrentPage to 1 when loading a new PDF
-    pdfCurrentPage = 1;
-
-    pdfjsLib.getDocument(pdfUrl).promise.then((pdf) => {
-        pdfDoc = pdf;
-        renderPage(pdfCurrentPage);
-
-        // Show the PDF viewer
-        const pdfViewer = document.getElementById('pdf-viewer');
-        if (pdfViewer) {
-            pdfViewer.style.display = 'block';
-        }
-    }).catch((error) => {
-        console.error('Error loading PDF:', error);
-        alert('Failed to load the PDF. Please try again.');
-    });
-}
-
 // Event listeners for PDF pagination
 document.getElementById('prev-page')?.addEventListener('click', () => {
     if (pdfCurrentPage > 1) {
@@ -169,14 +152,6 @@ document.getElementById('next-page')?.addEventListener('click', () => {
         renderPage(pdfCurrentPage);
     }
 });
-
-
-// Copy link (optional, if needed elsewhere)
-function copyLink(link) {
-    navigator.clipboard.writeText(link)
-        .then(() => alert('Link copied to clipboard!'))
-        .catch(() => alert('Failed to copy link.'));
-}
 
 // Download book cover
 function downloadCover(coverUrl, title) {
