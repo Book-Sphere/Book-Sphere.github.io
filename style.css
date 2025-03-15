@@ -245,6 +245,58 @@ nav {
 .download-btn:hover {
     background-color: var(--primary-light);
 }
+/* Style for the buttons container */
+.book-info .button-container {
+    display: flex;
+    gap: 0.5rem; /* Space between buttons */
+    margin-top: 0.5rem; /* Space above the buttons */
+    align-items: stretch; /* Ensure all buttons stretch to the same height */
+}
+
+/* Common styles for all buttons */
+.book-info .button-container button {
+    padding: 0.75rem; /* Same padding for all buttons */
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto; /* Let flexbox handle the height */
+}
+
+/* Specific styles for the Read Online button */
+.book-info .button-container .read-online-btn {
+    background-color: var(--primary);
+    color: white;
+    flex: 1; /* Take up remaining space */
+}
+
+.book-info .button-container .read-online-btn:hover {
+    background-color: var(--primary-light);
+}
+
+/* Specific styles for the Share button */
+.book-info .button-container .share-btn {
+    background-color: var(--primary);
+    color: rgb(255, 255, 255);
+    width: 40px; /* Fixed width for the Share button */
+    padding: 0.75rem; /* Same padding as other buttons */
+}
+
+.book-info .button-container .share-btn:hover {
+    background-color: var(--primary-light);
+}
+
+/* Ensure the Download button has the same height and padding */
+.book-info .download-btn {
+    padding: 0.75rem; /* Same padding as other buttons */
+    width: 100%; /* Full width */
+    margin-bottom: 0.5rem; /* Space below the Download button */
+    height: auto; /* Let flexbox handle the height */
+}
 
 .categories {
     display: flex;
@@ -270,23 +322,6 @@ nav {
     color: white;
 }
 
-/* Share Button */
-.share-btn {
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    width: 100%;
-    padding: 0.75rem;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    margin-top: 0.5rem;
-}
-
-.share-btn:hover {
-    background-color: var(--primary-light);
-}
 
 /* Download Cover Button */
 .book-cover {
@@ -376,6 +411,22 @@ nav {
 #page-numbers button.active {
     background-color: var(--primary);
     color: white;
+}
+
+.pdf-viewer {
+    display: none; /* Hidden by default */
+    margin: 20px auto;
+    text-align: center;
+}
+
+.pdf-controls {
+    margin-bottom: 10px;
+}
+
+#pdf-canvas {
+    border: 1px solid #ccc;
+    max-width: 100%;
+    height: auto;
 }
 
 footer {
@@ -523,7 +574,26 @@ footer {
     }
 }
 
+@media (max-width: 480px) {
+    .book-cover {
+        height: 350px;
+    }
+}
+
+@media (max-width: 360px) {
+    .book-cover {
+        height: 350px;
+    }
+}
+
+/* ---------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
 /* --------------------------------------Download page------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
+
 .download-book {
     display: flex;
     flex-direction: column;
@@ -788,6 +858,100 @@ footer {
     }
 }
 
+/* ----------------------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------- */
+/* ----------------------------------about section---------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------- */
+/* About Section */
+.about-section {
+    padding: 4rem 0;
+    background-color: var(--light);
+    color: var(--dark);
+}
+
+.about-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: var(--primary);
+}
+
+.about-section .subtitle {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--gray);
+}
+
+.about-content {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.about-text {
+    flex: 2;
+}
+
+.about-text h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.about-text p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: var(--dark);
+}
+
+.about-text ul {
+    list-style: disc;
+    margin-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.about-text ul li {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--dark);
+}
+
+.about-image {
+    flex: 1;
+    text-align: center;
+}
+
+.about-image img {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-content {
+        flex-direction: column;
+    }
+
+    .about-image {
+        order: -1;
+        margin-bottom: 2rem;
+    }
+
+    .about-section h1 {
+        font-size: 2rem;
+    }
+
+    .about-text h2 {
+        font-size: 1.5rem;
+    }
+}
 
 /* Dark Theme */
 body.dark-theme {
@@ -934,4 +1098,12 @@ body.dark-theme .newsletter button:hover {
 
 body.dark-theme .note {
     color: var(--dark);
+}
+
+body.dark-theme .book-info .button-container .share-btn {
+    color: var(--black);
+}
+
+body.dark-theme .book-info .button-container .read-online-btn {
+    color: var(--black);
 }

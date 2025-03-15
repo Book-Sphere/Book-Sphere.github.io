@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <title>Book Sphere</title>
-    <link rel="stylesheet" href="style.css">
+    <title>About Us - Book Library</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your existing CSS file -->
 </head>
 <body>
+    <!-- Header -->
     <header>
         <div class="container">
             <nav>
@@ -20,9 +18,9 @@
                     </a>
                 </div>
                 <div class="nav-links" id="nav-links">
-                    <a href="#home">Home</a>
-                    <a href="#featured-books">Books</a>
-                    <a href="#categories">Categories</a>
+                    <a href="index.html">Home</a>
+                    <a href="index.html#featured-books">Books</a>
+                    <a href="index.html#categories">Categories</a>
                     <a href="about.html">About</a>
                     <a href="#contactus">Contact</a>
                 </div>
@@ -34,69 +32,43 @@
         </div>
     </header>
     <div id="home"></div>
-        
-    <!-- Ad Space 3 -->
-    <div class="ad-space">
-        <p>Ad Space 3</p>
-    </div>
-
-    <section class="hero">
+    
+    <!-- About Section -->
+    <section class="about-section">
         <div class="container">
-            <div class="hero-content">
-                <h1>Discover Your Next Favorite Book</h1>
-                <p>Find the perfect books for every interest and explore our vast collection of bestsellers, new releases, and hidden gems.</p>
-                <div class="search-bar">
-                    <input type="text" id="search-input" placeholder="Search by title, author or keyword...">
-                    <button id="search-button">Search</button>
+            <h1>About Us</h1>
+            <p class="subtitle">Welcome to Book Library, your go-to destination for discovering and downloading amazing books!</p>
+
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Our Mission</h2>
+                    <p>
+                        At Book Library, we believe in the power of knowledge and storytelling. Our mission is to provide a platform where book lovers can explore, read, and download their favorite books for free. Whether you're a fan of fiction, non-fiction, or academic texts, we've got something for everyone.
+                    </p>
+
+                    <h2>What We Offer</h2>
+                    <ul>
+                        <li>A vast collection of books across various genres.</li>
+                        <li>Easy-to-use search and download features.</li>
+                        <li>Read books online without any hassle.</li>
+                        <li>Regular updates with new and trending titles.</li>
+                    </ul>
+
+                    <h2>Our Team</h2>
+                    <p>
+                        We are a passionate team of book enthusiasts, developers, and designers dedicated to making reading accessible to everyone. Our goal is to create a seamless experience for our users and foster a love for reading.
+                    </p>
+                </div>
+
+                <div class="about-image">
+                    <img src="img/about.jpg" alt="About Us Image">
                 </div>
             </div>
         </div>
     </section>
-    <div id="search-message" class="search-message"></div>
+
+    <!-- Footer -->
     
-    <main class="container">
-        <div class="categories" id="categories">
-            <div class="category active" id="All Books">All Books</div>
-            <div class="category" id="French">French</div>
-            <div class="category" id="Worksheets">Worksheets</div>
-            <div class="category" id="Mystery">Mystery</div>
-            <div class="category" id="English">English</div>
-            <div class="category" id="German">German</div>
-            <div class="category" id="Fiction">Fiction</div>
-            <div class="category" id="Kids">Kids</div>
-            <div class="category" id="Self Help">Self Help</div>
-            <div class="category" id="Biography">Biography</div>
-        </div>
-        
-        <h2 class="section-title">📚 Bestsellers</h2>
-        
-        <div class="books-grid" id="bestseller-books">
-            <!-- Books will be loaded here from JS -->
-        </div>
-
-        <h2 class="section-title">✨ Featured Books</h2>
-        
-        <div class="books-grid" id="featured-books">
-            <!-- Books will be loaded here from JS -->
-        </div>
-    </main>
-
-    <div class="pagination">
-        <button id="prev-page">Previous</button>
-        <div id="page-numbers"></div>
-        <button id="next-page">Next</button>
-    </div>
-
-    <!-- PDF Viewer Section -->
-    <div id="pdf-viewer" class="pdf-viewer">
-        <div class="pdf-controls">
-            <button id="prev-page">Previous</button>
-            <span>Page: <span id="page-num"></span> of <span id="page-count"></span></span>
-            <button id="next-page">Next</button>
-        </div>
-        <canvas id="pdf-canvas"></canvas>
-    </div>
-
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -140,7 +112,9 @@
                 © 2025 BookSphere Bookstore. All rights reserved.
             </div>
         </div>
-    </footer>   
-    <script src="script.js"></script>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script> <!-- Link to your existing JavaScript file -->
 </body>
 </html>
