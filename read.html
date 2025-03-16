@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - Book Library</title>
-    <link rel="stylesheet" href="style.css"> <!-- Link to your existing CSS file -->
+    <link rel="stylesheet" href="style.css">
+    <title>Reading | BookSphere</title>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="container">
             <nav>
-                <div class="logo">
-                    <a href="">
+                <div class="logo" id="logo">
+                    <a href="index.html#home">
                         <span class="logo-icon">📚</span>
                         <span class="text">Book Sphere</span>
                     </a>
                 </div>
                 <div class="nav-links" id="nav-links">
                     <a href="index.html">Home</a>
-                    <a href="index.html#featured-books">Books</a>
+                    <a href="#featured-books">Books</a>
                     <a href="index.html#categories">Categories</a>
                     <a href="about.html">About</a>
                     <a href="#contactus">Contact</a>
@@ -28,46 +27,28 @@
                     🌙 <!-- Moon icon for dark theme -->
                 </div>
                 <div class="menu-toggle" id="menu-toggle">☰</div>
+                
             </nav>
         </div>
     </header>
-    <div id="home"></div>
-    
-    <!-- About Section -->
-    <section class="about-section">
-        <div class="container">
-            <h1>About Us</h1>
-            <p class="subtitle">Welcome to Book Library, your go-to destination for discovering and downloading amazing books!</p>
 
-            <div class="about-content">
-                <div class="about-text">
-                    <h2>Our Mission</h2>
-                    <p>
-                        At Book Library, we believe in the power of knowledge and storytelling. Our mission is to provide a platform where book lovers can explore, read, and download their favorite books for free. Whether you're a fan of fiction, non-fiction, or academic texts, we've got something for everyone.
-                    </p>
+    <iframe id="pdf-viewer" src="" frameborder="0"></iframe>
 
-                    <h2>What We Offer</h2>
-                    <ul>
-                        <li>A vast collection of books across various genres.</li>
-                        <li>Easy-to-use search and download features.</li>
-                        <li>Read books online without any hassle.</li>
-                        <li>Regular updates with new and trending titles.</li>
-                    </ul>
-
-                    <h2>Our Team</h2>
-                    <p>
-                        We are a passionate team of book enthusiasts, developers, and designers dedicated to making reading accessible to everyone. Our goal is to create a seamless experience for our users and foster a love for reading.
-                    </p>
-                </div>
-
-                <div class="about-image">
-                    <img src="img/about.jpg" alt="About Us Image">
-                </div>
-            </div>
+    <div class="categories-wrapper">
+        <div class="category active" id="All-Books">All Books</div>
+        <div class="categories" id="categories">
+            <div class="category" id="French">French</div>
+            <div class="category" id="Worksheets">Worksheets</div>
+            <div class="category" id="Mystery">Mystery</div>
+            <div class="category" id="English">English</div>
+            <div class="category" id="German">German</div>
+            <div class="category" id="Fiction">Fiction</div>
+            <div class="category" id="Kids">Kids</div>
+            <div class="category" id="Self Help">Self Help</div>
+            <div class="category" id="Biography">Biography</div>
         </div>
-    </section>
-    <!-- Footer -->
-    
+    </div>
+
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -91,7 +72,7 @@
                         <br>
                         <a href="https://www.instagram.com/book.sphere7?igsh=MTVncHp4czA3bzY2Ng==">Instagram</a>
                         <br>
-                        <a href="https://www.facebook.com/share/g/1ERrACB9KU/ ">Facebook</a>
+                        <a href="https://www.facebook.com/share/g/1ERrACB9KU/">Facebook</a>
                         <br>
                         <a href="https://www.reddit.com/user/Competitive_Wash_629/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button">Reddit</a>
                         <br>
@@ -113,7 +94,58 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="script.js"></script> <!-- Link to your existing JavaScript file -->
+    <script>
+        function setupMenuToggle() {
+            const menuToggle = document.getElementById('menu-toggle');
+            const navLinks = document.getElementById('nav-links');
+        
+            if (menuToggle && navLinks) {
+                menuToggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            } else {
+                console.error('Menu toggle or nav links element not found!');
+            }
+        }
+        
+        // Call the function on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            setupMenuToggle();
+        });
+
+        // Function to get the book ID from the URL query parameter
+        function getBookIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('bookId');
+        }
+
+        // Function to fetch the book data and display the PDF
+        async function displayPdf() {
+            const bookId = getBookIdFromUrl();
+            if (!bookId) {
+                alert('Book ID not found in URL.');
+                return;
+            }
+
+            // Fetch the book data from books.json
+            const response = await fetch('books.json');
+            const books = await response.json();
+            const book = books.find(b => b.id === parseInt(bookId));
+
+            if (book && book.embedLink) {
+                // Set the iframe src to the book's embedLink
+                document.getElementById('pdf-viewer').src = book.embedLink;
+            } else {
+                alert('Book not found or no embed link available.');
+            }
+        }
+
+        // Call the function on page load
+        document.addEventListener('DOMContentLoaded', displayPdf);
+
+        if (!book || !book.embedLink) {
+        document.body.innerHTML = '<p style="text-align: center; color: red;">Book not found or no embed link available.</p>';
+        }
+    </script>
 </body>
 </html>
