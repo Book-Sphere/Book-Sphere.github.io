@@ -276,16 +276,30 @@
             // Set up the download button
             const downloadButton = document.getElementById('download-button');
             downloadButton.onclick = () => {
-                // Load and execute the ad script
-                const adScript = document.createElement('script');
-                adScript.type = 'text/javascript';
-                adScript.src = '//pl26134371.effectiveratecpm.com/a9/54/3c/a9543c62d5e709d953d8bfde3ceec3d8.js';
-                document.body.appendChild(adScript);
+                // Open the first ad in a new tab
+                window.open('https://www.highperformanceformat.com/841dc24e3b20f3560f966aa6251b0b11/invoke.js', '_blank');
 
-                // Start the download after 5 seconds
-                setTimeout(() => {
-                    window.open(book.downloadLink, '_blank');
-                }, 5000); // 5000 milliseconds = 5 seconds
+                // Open the second ad in a new tab
+                window.open('//pl26134371.effectiveratecpm.com/a9/54/3c/a9543c62d5e709d953d8bfde3ceec3d8.js', '_blank');
+
+                // Show a countdown message
+                const timerElement = document.createElement('div');
+                timerElement.textContent = `Download will start in 5 seconds...`;
+                document.querySelector('.buttons').appendChild(timerElement);
+
+                // Start the countdown
+                let timer = 5;
+                const interval = setInterval(() => {
+                    timer--;
+                    timerElement.textContent = `Download will start in ${timer} seconds...`;
+
+                    if (timer <= 0) {
+                        clearInterval(interval);
+                        timerElement.remove();
+                        // Start the download after 5 seconds
+                        window.open(book.downloadLink, '_blank');
+                    }
+                }, 1000); // Update every 1 second
             };
         }
 
