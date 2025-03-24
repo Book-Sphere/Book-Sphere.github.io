@@ -27,25 +27,63 @@
                     🌙 <!-- Moon icon for dark theme -->
                 </div>
                 <div class="menu-toggle" id="menu-toggle">☰</div>
-                
+                <script>
+                    // Function to toggle the mobile menu
+function setupMenuToggle() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    } else {
+        console.error('Menu toggle or nav links element not found!');
+    }
+}
+
+// Function to toggle between light and dark themes
+function setupThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+
+    // Check user's preferred theme from localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        body.classList.add(savedTheme);
+        updateThemeIcon(savedTheme);
+    }
+
+    // Toggle theme on button click
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-theme');
+        const isDarkTheme = body.classList.contains('dark-theme');
+        localStorage.setItem('theme', isDarkTheme ? 'dark-theme' : 'light-theme');
+        updateThemeIcon(isDarkTheme ? 'dark-theme' : 'light-theme');
+    });
+}
+
+// Function to update the theme icon
+function updateThemeIcon(theme) {
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.textContent = theme === 'dark-theme' ? '☀️' : '🌙';
+}
+
+// Call the functions on page load
+document.addEventListener('DOMContentLoaded', () => {
+    setupMenuToggle(); // Initialize the menu toggle
+    setupThemeToggle(); // Initialize the theme toggle
+});
+                </script>
             </nav>
         </div>
     </header>
 
-    <div class="ad-container">
-        <script type="text/javascript">
-            atOptions = {
-                'key' : '6b296ddca0017d1e589efc62c7f6980d',
-                'format' : 'iframe',
-                'height' : 250,
-                'width' : 300,
-                'params' : {}
-            };
-        </script>
-        <script type="text/javascript" src="//www.highperformanceformat.com/6b296ddca0017d1e589efc62c7f6980d/invoke.js"></script>
+    <!-- PDF Viewer Container -->
+    <button id="fullscreen-button">Full Screen</button>
+    <div class="pdf-viewer-container">
+        <iframe id="pdf-viewer" src="" frameborder="0" sandbox="allow-scripts allow-same-origin"></iframe>
     </div>
-
-    <iframe id="pdf-viewer" src="" frameborder="0"></iframe>
 
     <div class="categories-wrapper">
         <div class="category active" id="All-Books">All Books</div>
@@ -56,30 +94,23 @@
             <div class="category" id="English">English</div>
             <div class="category" id="German">German</div>
             <div class="category" id="Fiction">Fiction</div>
+            <div class="category" id="Teachers">Teachers</div>
+            <div class="category" id="Literature">Literature</div>
+            <div class="category" id="Vocabulary">Vocabulary</div>
             <div class="category" id="Kids">Kids</div>
+            <div class="category" id="Exams">Exams</div>
+            <div class="category" id="Spanish">Spanish</div>
             <div class="category" id="Self Help">Self Help</div>
             <div class="category" id="Biography">Biography</div>
+            <div class="category" id="Course">Course</div>
+            <div class="category" id="Education">Education</div>
         </div>
     </div>
-
     <h2 class="section-title">✨ Featured Books</h2>
         
-        <div class="books-grid" id="featured-books">
-            <!-- Books will be loaded here from JS -->
-        </div>
-
-        <div class="ad-container">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : '841dc24e3b20f3560f966aa6251b0b11',
-                    'format' : 'iframe',
-                    'height' : 60,
-                    'width' : 468,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/841dc24e3b20f3560f966aa6251b0b11/invoke.js"></script>
-        </div>
+    <div class="books-grid" id="featured-books">
+        <!-- Books will be loaded here from JS -->
+    </div>
 
     <footer>
         <div class="container">
@@ -127,24 +158,6 @@
     </footer>
 
     <script>
-        function setupMenuToggle() {
-            const menuToggle = document.getElementById('menu-toggle');
-            const navLinks = document.getElementById('nav-links');
-        
-            if (menuToggle && navLinks) {
-                menuToggle.addEventListener('click', () => {
-                    navLinks.classList.toggle('active');
-                });
-            } else {
-                console.error('Menu toggle or nav links element not found!');
-            }
-        }
-        
-        // Call the function on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            setupMenuToggle();
-        });
-
         // Function to get the book ID from the URL query parameter
         function getBookIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -169,15 +182,28 @@
                 document.getElementById('pdf-viewer').src = book.embedLink;
             } else {
                 alert('Book not found or no embed link available.');
+                document.body.innerHTML = '<p style="text-align: center; color: red;">Book not found or no embed link available.</p>';
             }
         }
 
+        // Full-screen functionality
+        const fullscreenButton = document.getElementById('fullscreen-button');
+        const pdfViewer = document.getElementById('pdf-viewer');
+
+        fullscreenButton.addEventListener('click', () => {
+            if (pdfViewer.requestFullscreen) {
+                pdfViewer.requestFullscreen();
+            } else if (pdfViewer.mozRequestFullScreen) { // Firefox
+                pdfViewer.mozRequestFullScreen();
+            } else if (pdfViewer.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                pdfViewer.webkitRequestFullscreen();
+            } else if (pdfViewer.msRequestFullscreen) { // IE/Edge
+                pdfViewer.msRequestFullscreen();
+            }
+        });
+
         // Call the function on page load
         document.addEventListener('DOMContentLoaded', displayPdf);
-
-        if (!book || !book.embedLink) {
-        document.body.innerHTML = '<p style="text-align: center; color: red;">Book not found or no embed link available.</p>';
-        }
     </script>
 
     <script src="script.js"></script>

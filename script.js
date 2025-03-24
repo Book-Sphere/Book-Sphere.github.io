@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 function displayBooks(bookList, sectionId) {
     const booksElement = document.getElementById(sectionId);
     booksElement.innerHTML = '';
-    
+
     bookList.forEach(book => {
         const bookCard = createBookCard(book);
         booksElement.appendChild(bookCard);
@@ -31,7 +31,7 @@ function displayBooks(bookList, sectionId) {
 function createBookCard(book) {
     const bookCard = document.createElement('div');
     bookCard.className = 'book-card';
-    
+
     bookCard.innerHTML = `
         <div class="book-cover">
             <div class="download-cover-btn" title="Download Cover" onclick="downloadCover('${book.cover}', '${book.title}')">
@@ -43,13 +43,13 @@ function createBookCard(book) {
             <h3 class="book-title">${book.title}</h3>
             <p class="book-author">by ${book.author}</p>
             <div class="button-container">
-                <button class="download-btn" onclick="redirectToDownloadPage(${book.id})">Download</button>
+                <button class="download-btn" onclick="window.open('download.html?bookId=${book.id}', '_blank')">Download</button>
                 <button class="share-btn" onclick="shareBook(${book.id})">➥</button>
-                <button class="read-online-btn" onclick="redirectToReadingPage(${book.id})">Read online</button>
+                <button class="read-online-btn" onclick="window.open('read.html?bookId=${book.id}', '_blank')">Read online</button>
             </div>
         </div>
     `;
-    
+
     return bookCard;
 }
 
@@ -73,8 +73,8 @@ function shareBook(bookId) {
             title: 'Check out this book!',
             url: downloadPageLink,
         })
-        .then(() => console.log('Shared successfully'))
-        .catch((error) => console.error('Error sharing:', error));
+            .then(() => console.log('Shared successfully'))
+            .catch((error) => console.error('Error sharing:', error));
     } else {
         // Fallback: Copy link to clipboard
         navigator.clipboard.writeText(downloadPageLink)
@@ -107,15 +107,15 @@ function downloadCover(coverUrl, title) {
 // Handle category filtering
 function updateCategories() {
     const categories = document.querySelectorAll('.category');
-    
+
     categories.forEach(category => {
         category.addEventListener('click', async () => {
             // Remove active class from all categories
             categories.forEach(cat => cat.classList.remove('active'));
-            
+
             // Add active class to clicked category
             category.classList.add('active');
-            
+
             const selectedCategory = category.textContent;
             const books = await fetchBooks();
             filterBooksByCategory(selectedCategory, books);
@@ -128,33 +128,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoriesContainer = document.createElement('div');
     categoriesContainer.className = 'categories';
 
-    // Move all child nodes of categories to the container
     while (categories.firstChild) {
         categoriesContainer.appendChild(categories.firstChild);
     }
 
-    // Append the container back to the categories div
     categories.appendChild(categoriesContainer);
 
-    // Duplicate the categories for seamless scrolling
     categoriesContainer.innerHTML += categoriesContainer.innerHTML;
 });
 
-// Filter books by category
+                                    // Filter books by category
 function filterBooksByCategory(category, books) {
-    const filteredBooks = category === 'All Books' 
-        ? books 
-        : books.filter(book => book.category === category);
-    
-    const filteredBestsellers = category === 'All Books' 
-        ? books.slice(0, 20) 
-        : books.filter(book => book.category === category).slice(0, 20);
-    
+    const filteredBooks = category === 'All Books'
+        ? books
+        : books.filter(book => book.categories.includes(category));
+
+    const filteredBestsellers = category === 'All Books'
+        ? books.slice(0, 20)
+        : books.filter(book => book.categories.includes(category)).slice(0, 20);
+
     displayBooks(filteredBooks, 'featured-books');
     displayBooks(filteredBestsellers, 'bestseller-books');
 }
 
-// Setup search functionality
+                                    // Setup search functionality
 function setupSearch() {
     const searchInput = document.getElementById('search-input');
     const searchButton = document.getElementById('search-button');
@@ -165,16 +162,16 @@ function setupSearch() {
         const books = await fetchBooks();
 
         if (query) {
-            const filteredBooks = books.filter(book => 
+            const filteredBooks = books.filter(book =>
                 book.title.toLowerCase().includes(query) ||
                 book.author.toLowerCase().includes(query) ||
-                book.id.toString().includes(query) // Search by ID
+                book.id.toString().includes(query)
             );
 
-            const filteredBestsellers = books.filter(book => 
+            const filteredBestsellers = books.filter(book =>
                 book.title.toLowerCase().includes(query) ||
                 book.author.toLowerCase().includes(query) ||
-                book.id.toString().includes(query) // Search by ID
+                book.id.toString().includes(query)
             ).slice(0, 20);
 
             displayBooks(filteredBooks, 'featured-books');
@@ -208,28 +205,27 @@ function setupSearch() {
 function setupMenuToggle() {
     const menuToggle = document.getElementById('menu-toggle');
     const navLinks = document.getElementById('nav-links');
-    
+
     menuToggle.addEventListener('click', () => {
         navLinks.classList.toggle('active');
     });
 }
 
 // Pagination
+
 let currentPage = 1;
-const booksPerPage = 30; // Number of books to display per page
+const booksPerPage = 30;
+const maxVisiblePages = 4; // Number of visible page buttons
 
 async function displayBooksWithPagination() {
     const books = await fetchBooks();
     const totalPages = Math.ceil(books.length / booksPerPage);
 
-    // Display books for the current page
     const startIndex = (currentPage - 1) * booksPerPage;
     const endIndex = startIndex + booksPerPage;
     const booksToDisplay = books.slice(startIndex, endIndex);
 
     displayBooks(booksToDisplay, 'featured-books');
-
-    // Update pagination buttons
     updatePaginationButtons(totalPages);
 }
 
@@ -237,44 +233,84 @@ function updatePaginationButtons(totalPages) {
     const pageNumbers = document.getElementById('page-numbers');
     pageNumbers.innerHTML = '';
 
-    for (let i = 1; i <= totalPages; i++) {
-        const button = document.createElement('button');
-        button.textContent = i;
-        button.addEventListener('click', () => {
-            currentPage = i;
-            displayBooksWithPagination();
-        });
+    // Calculate the range of visible page numbers
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
-        if (i === currentPage) {
-            button.classList.add('active');
-        }
-
-        pageNumbers.appendChild(button);
+    // Adjust startPage if endPage is at the limit
+    if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
 
-    // Enable/disable Previous and Next buttons
+    // Add "Previous" button
     const prevButton = document.getElementById('prev-page');
-    const nextButton = document.getElementById('next-page');
-
     prevButton.disabled = currentPage === 1;
+
+    // Add page numbers
+    if (startPage > 1) {
+        const firstPageButton = createPageButton(1);
+        pageNumbers.appendChild(firstPageButton);
+
+        if (startPage > 2) {
+            const ellipsis = document.createElement('span');
+            ellipsis.textContent = '...';
+            pageNumbers.appendChild(ellipsis);
+        }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+        const pageButton = createPageButton(i);
+        if (i === currentPage) {
+            pageButton.classList.add('active');
+        }
+        pageNumbers.appendChild(pageButton);
+    }
+
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            const ellipsis = document.createElement('span');
+            ellipsis.textContent = '...';
+            pageNumbers.appendChild(ellipsis);
+        }
+
+        const lastPageButton = createPageButton(totalPages);
+        pageNumbers.appendChild(lastPageButton);
+    }
+
+    // Add "Next" button
+    const nextButton = document.getElementById('next-page');
     nextButton.disabled = currentPage === totalPages;
-
-    prevButton.addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            displayBooksWithPagination();
-        }
-    });
-
-    nextButton.addEventListener('click', () => {
-        if (currentPage < totalPages) {
-            currentPage++;
-            displayBooksWithPagination();
-        }
-    });
 }
 
-// Call the function on page load
+function createPageButton(pageNumber) {
+    const button = document.createElement('button');
+    button.textContent = pageNumber;
+    button.addEventListener('click', () => {
+        currentPage = pageNumber;
+        displayBooksWithPagination();
+    });
+    return button;
+}
+
+// Event listeners for "Previous" and "Next" buttons
+document.getElementById('prev-page').addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        displayBooksWithPagination();
+    }
+});
+
+document.getElementById('next-page').addEventListener('click', async () => {
+    const books = await fetchBooks();
+    const totalPages = Math.ceil(books.length / booksPerPage);
+
+    if (currentPage < totalPages) {
+        currentPage++;
+        displayBooksWithPagination();
+    }
+});
+
+// Initialize pagination on page load
 document.addEventListener('DOMContentLoaded', () => {
     displayBooksWithPagination();
 });
@@ -329,4 +365,115 @@ function updateThemeIcon(theme) {
 // Call the function on page load
 document.addEventListener('DOMContentLoaded', () => {
     setupThemeToggle();
+});
+
+//slider
+
+// Fetch books from books.json
+async function fetchBooks() {
+    const response = await fetch('books.json');
+    const data = await response.json();
+    return data;
+}
+
+// Display featured books in the slider
+async function displayFeaturedBooksInSlider() {
+    const books = await fetchBooks();
+    const featuredBooks = books.filter(book => book.featured); // Filter featured books
+    const slider = document.getElementById('book-slider');
+
+    // Clear existing slides
+    slider.innerHTML = '';
+
+    // Add featured books to the slider
+    featuredBooks.forEach(book => {
+        const slide = document.createElement('div');
+        slide.className = 'slide';
+        slide.innerHTML = `
+            <img src="${book.cover}" alt="${book.title}" data-book-id="${book.id}">
+        `;
+        slider.appendChild(slide);
+    });
+
+    // Clone the first slide and append it to the end
+    const firstSlideClone = slider.firstElementChild.cloneNode(true);
+    slider.appendChild(firstSlideClone);
+
+    // Clone the last slide and prepend it to the beginning
+    const lastSlideClone = slider.lastElementChild.cloneNode(true);
+    slider.insertBefore(lastSlideClone, slider.firstElementChild);
+
+    // Add click event listeners to slides
+    const slides = document.querySelectorAll('.slide img');
+    slides.forEach(slide => {
+        slide.addEventListener('click', () => {
+            const bookId = slide.getAttribute('data-book-id');
+            redirectToDownloadPage(bookId);
+        });
+    });
+
+    // Initialize auto-scrolling
+    autoScrollSlider();
+}
+
+// Auto-scroll the slider with seamless infinite loop
+function autoScrollSlider() {
+    const slider = document.querySelector('.slider');
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const slideWidth = slides[0].offsetWidth;
+    let currentIndex = 1; // Start at 1 because the first slide is a clone
+
+    // Set initial position to the first real slide
+    slider.style.transform = `translateX(${-slideWidth}px)`;
+
+    setInterval(() => {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        const offset = -currentIndex * slideWidth;
+
+        // Smooth transition
+        slider.style.transition = 'transform 0.5s ease-in-out';
+        slider.style.transform = `translateX(${offset}px)`;
+
+        // Reset to the first real slide without animation
+        if (currentIndex === totalSlides - 1) {
+            setTimeout(() => {
+                slider.style.transition = 'none';
+                slider.style.transform = `translateX(${-slideWidth}px)`;
+                currentIndex = 1; // Reset to the first real slide
+            }, 500); // Wait for the transition to complete
+        }
+    }, 2000); // Change slide every 2 seconds
+}
+
+// Redirect to the download page
+function redirectToDownloadPage(bookId) {
+    window.location.href = `download.html?bookId=${bookId}`;
+}
+
+// Initialize the slider on page load
+document.addEventListener('DOMContentLoaded', () => {
+    displayFeaturedBooksInSlider();
+});
+
+// Back to Top Button Functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const backToTopButton = document.getElementById('back-to-top');
+
+    // Show or hide the button based on scroll position
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) { // Show the button after scrolling 300px
+            backToTopButton.style.display = 'block';
+        } else {
+            backToTopButton.style.display = 'none';
+        }
+    });
+
+    // Scroll to the top when the button is clicked
+    backToTopButton.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Smooth scrolling
+        });
+    });
 });
