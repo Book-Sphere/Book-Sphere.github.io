@@ -1,40 +1,18 @@
 {
   "version": 2,
   "builds": [
-    {"src": "api/download.js", "use": "@vercel/node"},
     {"src": "api/book/[id].js", "use": "@vercel/node"},
     {"src": "public/*", "use": "@vercel/static"},
-    {"src": "*.html", "use": "@vercel/static"},
-    {"src": "css/*.css", "use": "@vercel/static"},
-    {"src": "js/*.js", "use": "@vercel/static"}
+    {"src": "*.html", "use": "@vercel/static"}
   ],
   "routes": [
     {
-      "src": "/download",
-      "dest": "/api/download.js"
-    },
-    {
       "src": "/book/([0-9]+)",
       "dest": "/api/book/[id]"
-    },
-    {
-      "src": "/books.json",
-      "dest": "/public/books.json",
-      "headers": {
-        "Content-Type": "application/json"
-      }
-    },
-    {
-      "src": "/css/(.*)",
-      "dest": "/css/$1"
-    },
-    {
-      "src": "/js/(.*)",
-      "dest": "/js/$1"
     },
     {
       "src": "/(.*)",
       "dest": "/index.html"
     }
   ]
-}
+} 

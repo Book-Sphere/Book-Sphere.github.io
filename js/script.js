@@ -53,27 +53,27 @@ function createBookCard(book) {
 
 // ====== Navigation & Sharing ====== //
 function redirectToDownloadPage(bookId) {
-    window.open(`download.html?bookId=${bookId}`, '_blank');
+    window.location.href = `/download.html?bookId=${bookId}`;
 }
 
 function redirectToReadingPage(bookId) {
-    window.open(`read.html?bookId=${bookId}`, '_blank');
+    window.location.href = `/read.html?bookId=${bookId}`;
 }
 
 // FIXED SHARE FUNCTION
 function shareBook(bookId, title, cover) {
+    // Use this EXACT format
     const shareUrl = `https://book-sphere-eight.vercel.app/book/${bookId}`;
     
     if (navigator.share) {
         navigator.share({
-            title: `Read "${title}" on BookSphere`,
-            text: `Check out this free book: ${title}`,
+            title: `Download "${title}"`,
+            text: `Get this book for free on BookSphere`,
             url: shareUrl
-        }).catch(err => console.log('Share failed:', err));
+        });
     } else {
         navigator.clipboard.writeText(shareUrl)
-            .then(() => alert('Link copied to clipboard!'))
-            .catch(() => prompt('Copy this link:', shareUrl));
+            .then(() => alert('Link copied to clipboard!'));
     }
 }
 
