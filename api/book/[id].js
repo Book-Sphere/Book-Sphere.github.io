@@ -8,24 +8,25 @@ export default async function handler(req, res) {
     return res.status(404).send('Book not found');
   }
 
-  // Check for social media bots
-  const isBot = /facebookexternalhit|Twitterbot|WhatsApp|LinkedInBot|Slackbot/i.test(
+  // Enhanced bot detection
+  const isBot = /facebookexternalhit|Twitterbot|WhatsApp|LinkedInBot|Slackbot|Discordbot|TelegramBot/i.test(
     req.headers['user-agent'] || ''
   );
 
   if (isBot) {
-    // Return rich social media preview
     res.setHeader('Content-Type', 'text/html');
     return res.send(`
       <!DOCTYPE html>
-      <html>
+      <html prefix="og: https://ogp.me/ns#">
       <head>
-        <meta property="og:title" content="${book.title} | BookSphere">
-        <meta property="og:description" content="Free download: ${book.title} by ${book.author}">
+        <title>${book.title} | BookSphere</title>
+        <meta property="og:title" content="${book.title}">
+        <meta property="og:description" content="Download ${book.title} by ${book.author} for free">
         <meta property="og:image" content="${book.cover}">
         <meta property="og:url" content="https://book-sphere-eight.vercel.app/book/${id}">
+        <meta property="og:type" content="book">
         <meta name="twitter:card" content="summary_large_image">
-        <title>${book.title} | BookSphere</title>
+        <meta name="twitter:site" content="@booksphere">
       </head>
       <body>
         <script>window.location.href="/download.html?bookId=${id}"</script>
@@ -34,6 +35,5 @@ export default async function handler(req, res) {
     `);
   }
 
-  // Redirect normal users
   res.redirect(302, `/download.html?bookId=${id}`);
 }
