@@ -1,20 +1,22 @@
 {
   "version": 2,
   "builds": [
+    {"src": "api/download.js", "use": "@vercel/node"},
     {"src": "api/book/[id].js", "use": "@vercel/node"},
     {"src": "public/*", "use": "@vercel/static"},
     {"src": "*.html", "use": "@vercel/static"}
   ],
   "routes": [
     {
-      "src": "/book/([0-9]+)",
-      "dest": "/api/book/[id]",
-      "headers": {
-        "Cache-Control": "public, max-age=3600"
-      }
+      "src": "/download",
+      "dest": "/api/download.js"
     },
     {
-      "src": "/(.*)",
+      "src": "/book/([0-9]+)",
+      "dest": "/api/book/[id]"
+    },
+    {
+      "src": "/(.*)", 
       "dest": "/index.html"
     }
   ]

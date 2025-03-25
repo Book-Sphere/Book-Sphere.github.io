@@ -62,16 +62,16 @@ function redirectToReadingPage(bookId) {
 
 // FIXED SHARE FUNCTION
 function shareBook(bookId, title, cover) {
-    const shareUrl = `https://book-sphere-eight.vercel.app/book/${bookId}`;
+    // Use this EXACT URL format
+    const shareUrl = `https://book-sphere-eight.vercel.app/download?book=${bookId}`;
     
     if (navigator.share) {
         navigator.share({
-            title: `Read "${title}" on BookSphere`,
-            text: `Check out this free book: ${title}`,
+            title: `"${title}" - Free Download`,
+            text: `Download "${title}" for free on BookSphere`,
             url: shareUrl
-        }).catch(err => console.log('Share failed:', err));
+        }).catch(err => console.log('Share cancelled'));
     } else {
-        // Fallback for desktop browsers
         navigator.clipboard.writeText(shareUrl)
             .then(() => alert('Link copied to clipboard!'))
             .catch(() => prompt('Copy this link:', shareUrl));
