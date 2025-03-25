@@ -9,7 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Book Sphere</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -36,6 +36,7 @@
             </nav>
         </div>
     </header>
+
 
     <section class="hero">
         <div class="container">
@@ -80,11 +81,19 @@
         </div>
     </main>
 
+
     <h2 class="section-title">📚 Bestsellers</h2>
-    <div class="books-grid" id="bestseller-books"></div>
+
+    <div class="books-grid" id="bestseller-books">
+        <!-- Books will be loaded here from JS -->
+    </div>
 
     <h2 class="section-title">✨ Featured Books</h2>
-    <div class="books-grid" id="featured-books"></div>
+
+    <div class="books-grid" id="featured-books">
+        <!-- Books will be loaded here from JS -->
+    </div>
+    </main>
 
     <div class="pagination">
         <button id="prev-page">Previous</button>
@@ -97,7 +106,8 @@
             <div class="footer-content">
                 <div class="footer-section" id="about">
                     <h3 class="footer-title">About BookSphere</h3>
-                    <p>We're passionate about books and connecting readers with their next great read.</p>
+                    <p>We're passionate about books and connecting readers with their next great read. Our mission is to
+                        make book discovery easy and enjoyable.</p>
                 </div>
                 <div class="footer-section">
                     <h3 class="footer-title" id="contactus">Contact Us</h3>
@@ -111,11 +121,25 @@
                 <div class="footer-section">
                     <h3 class="footer-title">Quick Links</h3>
                     <ul class="footer-links" id="quick-links">
-                        <li><a href="https://whatsapp.com/channel/0029Vb5vL9LDuMRmc0mNvs3T">Whatsapp</a></li>
-                        <li><a href="https://www.instagram.com/book.sphere7">Instagram</a></li>
-                        <li><a href="https://www.facebook.com/share/g/1ERrACB9KU/">Facebook</a></li>
-                        <li><a href="mailto:books.era786@gmail.com">G-mail</a></li>
+                        <a href="https://whatsapp.com/channel/0029Vb5vL9LDuMRmc0mNvs3T">Whatsapp</a>
+                        <br>
+                        <a href="https://www.instagram.com/book.sphere7?igsh=MTVncHp4czA3bzY2Ng==">Instagram</a>
+                        <br>
+                        <a href="https://www.facebook.com/share/g/1ERrACB9KU/ ">Facebook</a>
+                        <br>
+                        <a
+                            href="https://www.reddit.com/user/Competitive_Wash_629/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button">Reddit</a>
+                        <br>
+                        <a href="mailto:books.era786@gmail.com">G-mail</a>
                     </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Stay Connected</h3>
+                    <p>Subscribe to our newsletter for updates and exclusive offers.</p>
+                    <div class="newsletter">
+                        <input type="email" placeholder="Your email address">
+                        <button>Subscribe</button>
+                    </div>
                 </div>
             </div>
             <div class="copyright">
@@ -123,10 +147,11 @@
             </div>
         </div>
     </footer>
-
+    
     <button id="back-to-top" title="Go to top">↑</button>
     <button id="back-to-bottom" title="Go to bottom">↓</button>
-    
-    <script src="/js/script.js"></script>
+
+    <script src="script.js"></script>
 </body>
+
 </html>

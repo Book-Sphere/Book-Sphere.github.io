@@ -1128,7 +1128,6 @@ footer {
     transform: scale(1.1);
 }
 
-
     /* Dark Theme */
     body.dark-theme {
         --primary: #e2bc40;
@@ -1160,7 +1159,7 @@ footer {
 
     body.dark-theme .nav-links a:hover,
     body.dark-theme .footer-links a:hover {
-        color: var(--primary);
+        color: var(--black);
     }
 
     body.dark-theme .search-bar input {
@@ -1287,7 +1286,8 @@ footer {
         color: var(--black);
     }
 
-    body.dark-theme #back-to-top, body.dark-theme #back-to-bottom {
+    body.dark-theme #back-to-top,
+    body.dark-theme #back-to-bottom {
         color: var(--black);
         background-color: var(--primary);
     }

@@ -1,20 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="Download Book | BookSphere">
-    <meta property="og:description" content="Download free books from BookSphere">
-    <meta property="og:image" content="https://book-sphere-eight.vercel.app/img/logo.png">
-    <meta property="og:url" content="https://book-sphere-eight.vercel.app/download.html">
-    <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
+    <link rel="stylesheet" href="style.css">
     <title>Download Page</title>
 </head>
-
 <body>
     <header>
         <div class="container">
@@ -45,40 +37,68 @@
         <img src="" alt="Book Cover" class="book-cover">
         <h3 class="quote">BookSphere provides you the free PDF books. Click below to download.</h3>
         <div class="buttons">
-            <h2>JOIN OUR WHATSAPP GROUP</h2>
+
+        <h2>JOIN OUR WHATSAPP GROUP</h2>
             <div class="whatsapp">
-                <a href="https://www.whatsapp.com/channel/0029Vb5vL9LDuMRmc0mNvs3T" target="_blank">
-                    <button class="link-btn1"><h3>Whatsapp Channel</h3></button>
-                </a>
+                <a href="https://www.whatsapp.com/channel/0029Vb5vL9LDuMRmc0mNvs3T"><button class="link-btn1"><h3>Whatsapp Channel</h3></button></a>
             </div>
 
             <h2>Join Our Facebook Group</h2>
             <div class="facebook">
-                <a href="https://www.facebook.com/groups/1438827183755412" target="_blank">
-                    <button class="link-btn2"><h3>Facebook Group</h3></button>
-                </a>
+                <a href="https://www.facebook.com/groups/1438827183755412"><button class="link-btn2"><h3>Facebook Group</h3></button></a>
             </div>
 
             <h2>Click Here to Download PDF</h2>
             <div class="download">
                 <button class="link-btn3"><h3>Click Here to Download PDF</h3></button>
-                <div class="n-box" style="border: 1px solid; margin-top: 10px;">
-                    <b><p class="k" style="color: red; padding-top: 5px;">⚠ Note:</p></b>
-                    <p class="note"> The PDF file will open automatically after 10 seconds after clicking.</p>
-                </div>
+            <div class="n-box" style="border: 1px solid; margin-top: 10px;">
+                <b><p class="k" style="color: red; padding-top: 5px;">⚠ Note:</p></b>
+                <p class="note"> The PDF file will open automatically after 10 seconds after clicking.</p>
+            </div>
             </div>
         </div>
     </div>
 
+    <div class="categories-wrapper">
+        <div class="category active" id="All-Books">All Books</div>
+        <div class="categories" id="categories">
+            <div class="category" id="French">French</div>
+            <div class="category" id="Worksheets">Worksheets</div>
+            <div class="category" id="Mystery">Mystery</div>
+            <div class="category" id="English">English</div>
+            <div class="category" id="German">German</div>
+            <div class="category" id="Fiction">Fiction</div>
+            <div class="category" id="Teachers">Teachers</div>
+            <div class="category" id="Literature">Literature</div>
+            <div class="category" id="Vocabulary">Vocabulary</div>
+            <div class="category" id="Kids">Kids</div>
+            <div class="category" id="Exams">Exams</div>
+            <div class="category" id="Spanish">Spanish</div>
+            <div class="category" id="Self Help">Self Help</div>
+            <div class="category" id="Biography">Biography</div>
+            <div class="category" id="Course">Course</div>
+            <div class="category" id="Education">Education</div>
+        </div>
+    </div>
+    
     <h2 class="section-title">✨ Featured Books</h2>
-    <div class="books-grid" id="featured-books"></div>
+    
+    <div class="books-grid" id="featured-books">
+        <!-- Books will be loaded here from JS -->
+    </div>
+
+    <div class="pagination">
+        <button id="prev-page">Previous</button>
+        <div id="page-numbers"></div>
+        <button id="next-page">Next</button>
+    </div>
 
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section" id="about">
                     <h3 class="footer-title">About BookSphere</h3>
-                    <p>We're passionate about books and connecting readers with their next great read.</p>
+                    <p>We're passionate about books and connecting readers with their next great read. Our mission is to make book discovery easy and enjoyable.</p>
                 </div>
                 <div class="footer-section">
                     <h3 class="footer-title" id="contactus">Contact Us</h3>
@@ -88,6 +108,28 @@
                         <textarea id="message" placeholder="Your Message" rows="4" required></textarea>
                         <button type="submit">Send Message</button>
                     </form>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links" id="quick-links">
+                        <a href="https://whatsapp.com/channel/0029Vb5vL9LDuMRmc0mNvs3T">Whatsapp</a>
+                        <br>
+                        <a href="https://www.instagram.com/book.sphere7?igsh=MTVncHp4czA3bzY2Ng==">Instagram</a>
+                        <br>
+                        <a href="https://www.facebook.com/share/g/1ERrACB9KU/">Facebook</a>
+                        <br>
+                        <a href="https://www.reddit.com/user/Competitive_Wash_629/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button">Reddit</a>
+                        <br>
+                        <a href="mailto:books.era786@gmail.com">G-mail</a>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Stay Connected</h3>
+                    <p>Subscribe to our newsletter for updates and exclusive offers.</p>
+                    <div class="newsletter">
+                        <input type="email" placeholder="Your email address">
+                        <button>Subscribe</button>
+                    </div>
                 </div>
             </div>
             <div class="copyright">
@@ -133,30 +175,9 @@
             document.querySelector('.download-book .title').textContent = book.title;
             document.querySelector('.download-book .book-cover').src = book.cover;
             document.querySelector('.download-book .quote').textContent = `BookSphere provides you the free PDF of "${book.title}". Click below to download.`;
-            document.title = `Download ${book.title} | BookSphere`;
-
-            // Update social media meta tags
-            const currentUrl = window.location.href;
-            const metaTags = [
-                { property: 'og:url', content: currentUrl },
-                { property: 'og:title', content: `Download ${book.title} | BookSphere` },
-                { property: 'og:description', content: `Download the free PDF of "${book.title}" by ${book.author}` },
-                { property: 'og:image', content: book.cover },
-                { name: 'twitter:title', content: `Download ${book.title} | BookSphere` },
-                { name: 'twitter:description', content: `Download the free PDF of "${book.title}" by ${book.author}` },
-                { name: 'twitter:image', content: book.cover }
-            ];
-
-            metaTags.forEach(tag => {
-                let element = document.querySelector(`meta[property="${tag.property}"]`) ||
-                    document.querySelector(`meta[name="${tag.name}"]`);
-                if (element) {
-                    element.setAttribute('content', tag.content);
-                }
-            });
 
             // Set up the download button
-            const downloadButton = document.querySelector('.link-btn3');
+            const downloadButton = document.getElementById('download-button');
             downloadButton.onclick = () => {
                 startDownloadTimer(book.downloadLink);
             };
@@ -181,11 +202,76 @@
                     // Start the download after 10 seconds
                     window.open(downloadLink, '_blank');
                 }
-            }, 1000);
+            }, 1000); // Update every 1 second
         }
 
-        // Setup back to top/bottom buttons
-        function setupScrollButtons() {
+        // Call the function on page load
+        document.addEventListener('DOMContentLoaded', displaySelectedBook);
+
+        let clickCount = 0;
+let isTimerRunning = false; // Flag to check if a timer is already running
+
+function startDownloadTimer(downloadLink) {
+    if (isTimerRunning) {
+        return; // Exit if a timer is already running
+    }
+
+    clickCount++;
+    if (clickCount >= 3) {
+        showPopup(downloadLink);
+        return;
+    }
+
+    isTimerRunning = true; // Set the flag to true
+    let timer = 10;
+    const timerElement = document.createElement('div');
+    timerElement.textContent = `Download will start in ${timer} seconds...`;
+    document.querySelector('.buttons').appendChild(timerElement);
+
+    const interval = setInterval(() => {
+        timer--;
+        timerElement.textContent = `Download will start in ${timer} seconds...`;
+
+        if (timer <= 0) {
+            clearInterval(interval);
+            window.open(downloadLink, '_blank');
+            timerElement.remove();
+            isTimerRunning = false; // Reset the flag after the timer ends
+        }
+    }, 1000);
+}
+
+function showPopup(downloadLink) {
+    const popup = document.createElement('div');
+    popup.className = 'popup';
+    popup.innerHTML = `
+        <div class="popup-content">
+            <p>If the download is not started, <a href="${downloadLink}" target="_blank">click here to download</a>.</p>
+            <button onclick="closePopup()">Close</button>
+        </div>
+    `;
+    document.body.appendChild(popup);
+}
+
+function closePopup() {
+    const popup = document.querySelector('.popup');
+    if (popup) {
+        popup.remove();
+    }
+}
+
+// Update the download button event listener
+document.querySelector('.link-btn3').onclick = () => {
+    const bookId = getQueryParam('bookId');
+    if (bookId) {
+        fetchBookById(bookId).then(book => {
+            startDownloadTimer(book.downloadLink);
+        });
+    }
+};
+
+ // Setup back to top/bottom buttons
+ function setupScrollButtons() {
             const backToTop = document.getElementById('back-to-top');
             const backToBottom = document.getElementById('back-to-bottom');
             
@@ -237,5 +323,7 @@
             setupThemeToggle();
         });
     </script>
+
+    <script src="script.js"></script>
 </body>
 </html>

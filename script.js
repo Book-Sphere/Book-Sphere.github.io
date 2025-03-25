@@ -1,4 +1,3 @@
-// ====== Core Functions ====== //
 async function fetchBooks() {
     try {
         const response = await fetch('./books.json'); // Changed to absolute path
@@ -10,10 +9,9 @@ async function fetchBooks() {
     }
 }
 
-// ====== Book Display Logic ====== //
+// Display books in a section
 function displayBooks(bookList, sectionId) {
     const booksElement = document.getElementById(sectionId);
-    if (!booksElement) return;
     booksElement.innerHTML = '';
 
     bookList.forEach(book => {
@@ -22,62 +20,69 @@ function displayBooks(bookList, sectionId) {
     });
 }
 
+// Create a book card element
 function createBookCard(book) {
     const bookCard = document.createElement('div');
     bookCard.className = 'book-card';
 
-    // Sanitize inputs
-    const sanitize = (str) => str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const title = sanitize(book.title);
-    const author = sanitize(book.author);
-
     bookCard.innerHTML = `
         <div class="book-cover">
-            <div class="download-cover-btn" title="Download Cover" 
-                onclick="downloadCover('${book.cover}', '${title}')">⬇️</div>
-            <div class="book-cover-image" style="background-image: url('${book.cover}')" 
-                onclick="redirectToDownloadPage(${book.id})"></div>
+            <div class="download-cover-btn" title="Download Cover" onclick="downloadCover('${book.cover}', '${book.title}')">
+                ⬇️
+            </div>
+            <div class="book-cover-image" style="background-image: url('${book.cover}')"></div>
         </div>
         <div class="book-info">
-            <h3 class="book-title">${title}</h3>
-            <p class="book-author">by ${author}</p>
+            <h3 class="book-title">${book.title}</h3>
+            <p class="book-author">by ${book.author}</p>
             <div class="button-container">
-                <button class="download-btn" onclick="redirectToDownloadPage(${book.id})">Download</button>
-                <button class="share-btn" onclick="shareBook(${book.id}, '${title}', '${book.cover}')">➥</button>
-                <button class="read-online-btn" onclick="redirectToReadingPage(${book.id})">Read online</button>
+                <button class="download-btn" onclick="window.open('download.html?bookId=${book.id}', '_blank')">Download</button>
+                <button class="share-btn" onclick="shareBook(${book.id})">➥</button>
+                <button class="read-online-btn" onclick="window.open('read.html?bookId=${book.id}', '_blank')">Read online</button>
             </div>
         </div>
     `;
+
     return bookCard;
 }
 
-// ====== Navigation & Sharing ====== //
+// Redirect to the download page
 function redirectToDownloadPage(bookId) {
-    window.location.href = `/download.html?bookId=${bookId}`;
+    window.location.href = `download.html?bookId=${bookId}`;
 }
 
 function redirectToReadingPage(bookId) {
-    window.location.href = `/read.html?bookId=${bookId}`;
+    window.location.href = `read.html?bookId=${bookId}`;
 }
 
-// FIXED SHARE FUNCTION
-function shareBook(bookId, title, cover) {
-    // Use this EXACT format
-    const shareUrl = `https://book-sphere-eight.vercel.app/book/${bookId}`;
-    
+// Share the download page link
+function shareBook(bookId) {
+    // Generate the download page link dynamically
+    const downloadPageLink = `${window.location.origin}/download.html?bookId=${bookId}`;
+
     if (navigator.share) {
+        // Use the Web Share API if available
         navigator.share({
-            title: `Download "${title}"`,
-            text: `Get this book for free on BookSphere`,
-            url: shareUrl
-        });
+            title: 'Check out this book!',
+            url: downloadPageLink,
+        })
+            .then(() => console.log('Shared successfully'))
+            .catch((error) => console.error('Error sharing:', error));
     } else {
-        navigator.clipboard.writeText(shareUrl)
-            .then(() => alert('Link copied to clipboard!'));
+        // Fallback: Copy link to clipboard
+        navigator.clipboard.writeText(downloadPageLink)
+            .then(() => alert('Link copied to clipboard!'))
+            .catch(() => alert('Failed to copy link.'));
     }
 }
 
-// ====== Utilities ====== //
+// Copy link (optional, if needed elsewhere)
+function copyLink(link) {
+    navigator.clipboard.writeText(link)
+        .then(() => alert('Link copied to clipboard!'))
+        .catch(() => alert('Failed to copy link.'));
+}
+    
 function downloadCover(coverUrl, title) {
     fetch(coverUrl)
         .then(response => response.blob())
@@ -92,25 +97,33 @@ function downloadCover(coverUrl, title) {
         .catch(() => alert('Failed to download cover.'));
 }
 
-// ====== Categories & Search ====== //
 function updateCategories() {
     const categories = document.querySelectorAll('.category');
+
     categories.forEach(category => {
         category.addEventListener('click', async () => {
+            // Remove active class from all categories
             categories.forEach(cat => cat.classList.remove('active'));
+
+            // Add active class to clicked category
             category.classList.add('active');
+
+            const selectedCategory = category.textContent;
             const books = await fetchBooks();
-            filterBooksByCategory(category.textContent, books);
+            filterBooksByCategory(selectedCategory, books);
         });
     });
 }
 
 function filterBooksByCategory(category, books) {
-    const filteredBooks = category === 'All Books' 
-        ? books 
+    const filteredBooks = category === 'All Books'
+        ? books
         : books.filter(book => book.categories.includes(category));
-    
-    const filteredBestsellers = filteredBooks.slice(0, 20);
+
+    const filteredBestsellers = category === 'All Books'
+        ? books.slice(0, 20)
+        : books.filter(book => book.categories.includes(category)).slice(0, 20);
+
     displayBooks(filteredBooks, 'featured-books');
     displayBooks(filteredBestsellers, 'bestseller-books');
 }
@@ -123,26 +136,45 @@ function setupSearch() {
     const performSearch = async () => {
         const query = searchInput.value.trim().toLowerCase();
         const books = await fetchBooks();
-        
+
         if (query) {
             const filteredBooks = books.filter(book =>
                 book.title.toLowerCase().includes(query) ||
-                book.author.toLowerCase().includes(query)
+                book.author.toLowerCase().includes(query) ||
+                book.id.toString().includes(query)
             );
+
+            const filteredBestsellers = books.filter(book =>
+                book.title.toLowerCase().includes(query) ||
+                book.author.toLowerCase().includes(query) ||
+                book.id.toString().includes(query)
+            ).slice(0, 20);
+
             displayBooks(filteredBooks, 'featured-books');
-            displayBooks(filteredBooks.slice(0, 20), 'bestseller-books');
-            searchMessage.textContent = filteredBooks.length 
-                ? `Found ${filteredBooks.length} book(s)` 
-                : 'No books found';
+            displayBooks(filteredBestsellers, 'bestseller-books');
+
+            // Show a message if no results are found
+            if (filteredBooks.length === 0) {
+                searchMessage.textContent = 'No books found matching your search.';
+            } else {
+                searchMessage.textContent = `Found ${filteredBooks.length} book(s) matching your search.`;
+            }
         } else {
             displayBooks(books, 'featured-books');
             displayBooks(books.slice(0, 20), 'bestseller-books');
-            searchMessage.textContent = '';
+            searchMessage.textContent = ''; // Clear the message
         }
     };
 
+    // Search on button click
     searchButton.addEventListener('click', performSearch);
-    searchInput.addEventListener('keydown', (e) => e.key === 'Enter' && performSearch());
+
+    // Search on Enter key press
+    searchInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            performSearch();
+        }
+    });
 }
 
 // ====== Pagination ====== //
