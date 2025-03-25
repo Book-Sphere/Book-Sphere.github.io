@@ -62,44 +62,19 @@ function redirectToReadingPage(bookId) {
 
 // FIXED SHARE FUNCTION
 function shareBook(bookId, title, cover) {
-    const shareUrl = `${window.location.origin}/book/${bookId}`;
+    const shareUrl = `https://book-sphere-eight.vercel.app/book/${bookId}`;
     const shareText = `Check out "${title}" on BookSphere!`;
     
-    // For mobile devices with share API
     if (navigator.share) {
         navigator.share({
             title: shareText,
             text: `Download "${title}" for free`,
             url: shareUrl,
         }).catch(err => console.log('Share failed:', err));
-    } 
-    // For desktop - show share options
-    else {
-        const shareWindow = window.open('', '_blank', 'width=500,height=400');
-        shareWindow.document.write(`
-            <html>
-            <head><title>Share Book</title></head>
-            <body style="font-family: Arial, sans-serif; padding: 20px;">
-                <h2>Share "${title}"</h2>
-                <img src="${cover}" style="max-width: 200px; margin-bottom: 20px;">
-                <div style="margin-bottom: 20px;">
-                    <button onclick="window.open('https://facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}', '_blank')" 
-                            style="padding: 8px 12px; margin-right: 10px;">
-                        Facebook
-                    </button>
-                    <button onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}', '_blank')"
-                            style="padding: 8px 12px; margin-right: 10px;">
-                        Twitter
-                    </button>
-                    <button onclick="navigator.clipboard.writeText('${shareUrl}').then(() => alert('Link copied!'))"
-                            style="padding: 8px 12px;">
-                        Copy Link
-                    </button>
-                </div>
-                <button onclick="window.close()" style="padding: 8px 12px;">Close</button>
-            </body>
-            </html>
-        `);
+    } else {
+        navigator.clipboard.writeText(shareUrl)
+            .then(() => alert('Link copied to clipboard!'))
+            .catch(() => alert('Failed to copy link.'));
     }
 }
 
