@@ -64,7 +64,7 @@ function redirectToReadingPage(bookId) {
 function shareBook(bookId, title, cover) {
     // Ensure bookId is a number
     const numericId = typeof bookId === 'string' ? parseInt(bookId) : bookId;
-    const shareUrl = `${window.location.origin}/book/${numericId}`;
+    const shareUrl = `https://book-sphere-eight.vercel.app/book/${numericId}`;
     
     if (navigator.share) {
         navigator.share({

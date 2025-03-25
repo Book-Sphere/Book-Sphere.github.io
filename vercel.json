@@ -1,16 +1,20 @@
 {
     "version": 2,
+    "builds": [
+      {
+        "src": "api/book/[id].js",
+        "use": "@vercel/node"
+      }
+    ],
     "routes": [
       {
-        "src": "/book/([^/]+)",
-        "dest": "/api/book/[id]"
+        "src": "/book/([0-9]+)",
+        "dest": "/api/book/[id]",
+        "methods": ["GET"]
       },
       {
-        "src": "/books.json",
-        "dest": "/books.json",
-        "headers": {
-          "Cache-Control": "public, max-age=3600"
-        }
+        "src": "/(.*)",
+        "dest": "/index.html"
       }
     ]
   }
