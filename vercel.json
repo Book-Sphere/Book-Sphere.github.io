@@ -1,34 +1,39 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "*.html",
-        "use": "@vercel/static"
-      },
-      {
-        "src": "*.js",
-        "use": "@vercel/static"
-      },
-      {
-        "src": "*.css",
-        "use": "@vercel/static"
-      },
-      {
-        "src": "api/book/[id].js",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/book/([0-9]+)",
-        "dest": "/api/book/[id]"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/index.html",
-        "headers": {
-          "Cache-Control": "public, max-age=3600"
-        }
-      }
-    ]
-  }
+  "version": 2,
+  "builds": [
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "css/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "js/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "api/book/[id].js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/book/([0-9]+)",
+      "dest": "/api/book/[id]"
+    },
+    {
+      "src": "/css/(.*)",
+      "dest": "/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/js/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
