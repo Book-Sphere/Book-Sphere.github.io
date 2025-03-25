@@ -6,6 +6,14 @@
         "use": "@vercel/static"
       },
       {
+        "src": "*.js",
+        "use": "@vercel/static"
+      },
+      {
+        "src": "*.css",
+        "use": "@vercel/static"
+      },
+      {
         "src": "api/book/[id].js",
         "use": "@vercel/node"
       }
@@ -16,12 +24,11 @@
         "dest": "/api/book/[id]"
       },
       {
-        "src": "/",
-        "dest": "/index.html"
-      },
-      {
         "src": "/(.*)",
-        "dest": "/index.html"
+        "dest": "/index.html",
+        "headers": {
+          "Cache-Control": "public, max-age=3600"
+        }
       }
     ]
   }
