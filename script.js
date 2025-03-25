@@ -6,7 +6,7 @@ async function fetchBooks() {
         return await response.json();
     } catch (error) {
         console.error('Error loading books:', error);
-        return []; // Fallback empty array
+        return [];
     }
 }
 
@@ -53,11 +53,11 @@ function createBookCard(book) {
 
 // ====== Navigation & Sharing ====== //
 function redirectToDownloadPage(bookId) {
-    window.location.href = `download.html?bookId=${bookId}`;
+    window.open(`download.html?bookId=${bookId}`, '_blank');
 }
 
 function redirectToReadingPage(bookId) {
-    window.location.href = `read.html?bookId=${bookId}`;
+    window.open(`read.html?bookId=${bookId}`, '_blank');
 }
 
 // FIXED SHARE FUNCTION
@@ -283,7 +283,7 @@ function autoScrollSlider() {
     }, 2000);
 }
 
-// ====== Scroll to Top ====== //
+// ====== Scroll Management ====== //
 function scrollToTop() {
     window.scrollTo({
         top: 0,
@@ -291,15 +291,26 @@ function scrollToTop() {
     });
 }
 
-function setupBackToTopButton() {
-    const backToTopButton = document.getElementById('back-to-top');
-    if (!backToTopButton) return;
-
-    window.addEventListener('scroll', () => {
-        backToTopButton.style.display = window.scrollY > 300 ? 'block' : 'none';
-    });
-
-    backToTopButton.addEventListener('click', scrollToTop);
+function setupScrollButtons() {
+    const backToTop = document.getElementById('back-to-top');
+    const backToBottom = document.getElementById('back-to-bottom');
+    
+    if (backToTop) {
+        window.addEventListener('scroll', () => {
+            backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
+        });
+        backToTop.addEventListener('click', scrollToTop);
+    }
+    
+    if (backToBottom) {
+        window.addEventListener('scroll', () => {
+            const scrolledToBottom = (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100;
+            backToBottom.style.display = scrolledToBottom ? 'none' : 'block';
+        });
+        backToBottom.addEventListener('click', () => {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+    }
 }
 
 // ====== Theme Toggle ====== //
@@ -336,7 +347,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupThemeToggle();
     setupMenuToggle();
     setupContactForm();
-    setupBackToTopButton();
+    setupScrollButtons();
 });
 
 // Helper Functions
