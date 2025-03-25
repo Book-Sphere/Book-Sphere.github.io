@@ -1,8 +1,16 @@
 {
+    "version": 2,
     "routes": [
       {
-        "src": "/book/(?<id>[^/]+)",
-        "dest": "/api/book/[id].js"
+        "src": "/book/([^/]+)",
+        "dest": "/api/book/[id]"
+      },
+      {
+        "src": "/books.json",
+        "dest": "/books.json",
+        "headers": {
+          "Cache-Control": "public, max-age=3600"
+        }
       }
     ]
   }
