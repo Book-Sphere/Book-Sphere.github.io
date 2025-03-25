@@ -1,24 +1,19 @@
-// Fetch books from books.json
+// ====== Core Functions ====== //
 async function fetchBooks() {
-    const response = await fetch('books.json');
-    const data = await response.json();
-    return data;
+    try {
+        const response = await fetch('books.json');
+        if (!response.ok) throw new Error('Failed to fetch books');
+        return await response.json();
+    } catch (error) {
+        console.error('Error loading books:', error);
+        return []; // Fallback empty array
+    }
 }
 
-// Display books on page load
-document.addEventListener('DOMContentLoaded', async () => {
-    const books = await fetchBooks();
-    const bestsellers = books.slice(0, 20); // Example: Use the first 20 books as bestsellers
-    displayBooks(books, 'featured-books');
-    displayBooks(bestsellers, 'bestseller-books');
-    updateCategories();
-    setupSearch();
-    setupMenuToggle();
-});
-
-// Display books in a section
+// ====== Book Display Logic ====== //
 function displayBooks(bookList, sectionId) {
     const booksElement = document.getElementById(sectionId);
+    if (!booksElement) return;
     booksElement.innerHTML = '';
 
     bookList.forEach(book => {
@@ -27,33 +22,36 @@ function displayBooks(bookList, sectionId) {
     });
 }
 
-// Create a book card element
 function createBookCard(book) {
     const bookCard = document.createElement('div');
     bookCard.className = 'book-card';
 
+    // Sanitize inputs
+    const sanitize = (str) => str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const title = sanitize(book.title);
+    const author = sanitize(book.author);
+
     bookCard.innerHTML = `
         <div class="book-cover">
-            <div class="download-cover-btn" title="Download Cover" onclick="downloadCover('${book.cover}', '${book.title}')">
-                ⬇️
-            </div>
-            <div class="book-cover-image" style="background-image: url('${book.cover}')"></div>
+            <div class="download-cover-btn" title="Download Cover" 
+                onclick="downloadCover('${book.cover}', '${title}')">⬇️</div>
+            <div class="book-cover-image" style="background-image: url('${book.cover}')" 
+                onclick="redirectToDownloadPage(${book.id})"></div>
         </div>
         <div class="book-info">
-            <h3 class="book-title">${book.title}</h3>
-            <p class="book-author">by ${book.author}</p>
+            <h3 class="book-title">${title}</h3>
+            <p class="book-author">by ${author}</p>
             <div class="button-container">
-                <button class="download-btn" onclick="window.open('download.html?bookId=${book.id}', '_blank')">Download</button>
-                <button class="share-btn" onclick="shareBook(${book.id})">➥</button>
-                <button class="read-online-btn" onclick="window.open('read.html?bookId=${book.id}', '_blank')">Read online</button>
+                <button class="download-btn" onclick="redirectToDownloadPage(${book.id})">Download</button>
+                <button class="share-btn" onclick="shareBook(${book.id}, '${title}', '${book.cover}')">➥</button>
+                <button class="read-online-btn" onclick="redirectToReadingPage(${book.id})">Read online</button>
             </div>
         </div>
     `;
-
     return bookCard;
 }
 
-// Redirect to the download page
+// ====== Navigation & Sharing ====== //
 function redirectToDownloadPage(bookId) {
     window.location.href = `download.html?bookId=${bookId}`;
 }
@@ -62,34 +60,50 @@ function redirectToReadingPage(bookId) {
     window.location.href = `read.html?bookId=${bookId}`;
 }
 
-// Share the download page link
-function shareBook(bookId) {
-    // Generate the download page link dynamically
-    const downloadPageLink = `${window.location.origin}/download.html?bookId=${bookId}`;
-
+// FIXED SHARE FUNCTION
+function shareBook(bookId, title, cover) {
+    const shareUrl = `${window.location.origin}/book/${bookId}`;
+    const shareText = `Check out "${title}" on BookSphere!`;
+    
+    // For mobile devices with share API
     if (navigator.share) {
-        // Use the Web Share API if available
         navigator.share({
-            title: 'Check out this book!',
-            url: downloadPageLink,
-        })
-            .then(() => console.log('Shared successfully'))
-            .catch((error) => console.error('Error sharing:', error));
-    } else {
-        // Fallback: Copy link to clipboard
-        navigator.clipboard.writeText(downloadPageLink)
-            .then(() => alert('Link copied to clipboard!'))
-            .catch(() => alert('Failed to copy link.'));
+            title: shareText,
+            text: `Download "${title}" for free`,
+            url: shareUrl,
+        }).catch(err => console.log('Share failed:', err));
+    } 
+    // For desktop - show share options
+    else {
+        const shareWindow = window.open('', '_blank', 'width=500,height=400');
+        shareWindow.document.write(`
+            <html>
+            <head><title>Share Book</title></head>
+            <body style="font-family: Arial, sans-serif; padding: 20px;">
+                <h2>Share "${title}"</h2>
+                <img src="${cover}" style="max-width: 200px; margin-bottom: 20px;">
+                <div style="margin-bottom: 20px;">
+                    <button onclick="window.open('https://facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}', '_blank')" 
+                            style="padding: 8px 12px; margin-right: 10px;">
+                        Facebook
+                    </button>
+                    <button onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}', '_blank')"
+                            style="padding: 8px 12px; margin-right: 10px;">
+                        Twitter
+                    </button>
+                    <button onclick="navigator.clipboard.writeText('${shareUrl}').then(() => alert('Link copied!'))"
+                            style="padding: 8px 12px;">
+                        Copy Link
+                    </button>
+                </div>
+                <button onclick="window.close()" style="padding: 8px 12px;">Close</button>
+            </body>
+            </html>
+        `);
     }
 }
 
-// Copy link (optional, if needed elsewhere)
-function copyLink(link) {
-    navigator.clipboard.writeText(link)
-        .then(() => alert('Link copied to clipboard!'))
-        .catch(() => alert('Failed to copy link.'));
-}
-
+// ====== Utilities ====== //
 function downloadCover(coverUrl, title) {
     fetch(coverUrl)
         .then(response => response.blob())
@@ -104,54 +118,29 @@ function downloadCover(coverUrl, title) {
         .catch(() => alert('Failed to download cover.'));
 }
 
-// Handle category filtering
+// ====== Categories & Search ====== //
 function updateCategories() {
     const categories = document.querySelectorAll('.category');
-
     categories.forEach(category => {
         category.addEventListener('click', async () => {
-            // Remove active class from all categories
             categories.forEach(cat => cat.classList.remove('active'));
-
-            // Add active class to clicked category
             category.classList.add('active');
-
-            const selectedCategory = category.textContent;
             const books = await fetchBooks();
-            filterBooksByCategory(selectedCategory, books);
+            filterBooksByCategory(category.textContent, books);
         });
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const categories = document.getElementById('categories');
-    const categoriesContainer = document.createElement('div');
-    categoriesContainer.className = 'categories';
-
-    while (categories.firstChild) {
-        categoriesContainer.appendChild(categories.firstChild);
-    }
-
-    categories.appendChild(categoriesContainer);
-
-    categoriesContainer.innerHTML += categoriesContainer.innerHTML;
-});
-
-                                    // Filter books by category
 function filterBooksByCategory(category, books) {
-    const filteredBooks = category === 'All Books'
-        ? books
+    const filteredBooks = category === 'All Books' 
+        ? books 
         : books.filter(book => book.categories.includes(category));
-
-    const filteredBestsellers = category === 'All Books'
-        ? books.slice(0, 20)
-        : books.filter(book => book.categories.includes(category)).slice(0, 20);
-
+    
+    const filteredBestsellers = filteredBooks.slice(0, 20);
     displayBooks(filteredBooks, 'featured-books');
     displayBooks(filteredBestsellers, 'bestseller-books');
 }
 
-                                    // Setup search functionality
 function setupSearch() {
     const searchInput = document.getElementById('search-input');
     const searchButton = document.getElementById('search-button');
@@ -160,320 +149,214 @@ function setupSearch() {
     const performSearch = async () => {
         const query = searchInput.value.trim().toLowerCase();
         const books = await fetchBooks();
-
+        
         if (query) {
             const filteredBooks = books.filter(book =>
                 book.title.toLowerCase().includes(query) ||
-                book.author.toLowerCase().includes(query) ||
-                book.id.toString().includes(query)
+                book.author.toLowerCase().includes(query)
             );
-
-            const filteredBestsellers = books.filter(book =>
-                book.title.toLowerCase().includes(query) ||
-                book.author.toLowerCase().includes(query) ||
-                book.id.toString().includes(query)
-            ).slice(0, 20);
-
             displayBooks(filteredBooks, 'featured-books');
-            displayBooks(filteredBestsellers, 'bestseller-books');
-
-            // Show a message if no results are found
-            if (filteredBooks.length === 0) {
-                searchMessage.textContent = 'No books found matching your search.';
-            } else {
-                searchMessage.textContent = `Found ${filteredBooks.length} book(s) matching your search.`;
-            }
+            displayBooks(filteredBooks.slice(0, 20), 'bestseller-books');
+            searchMessage.textContent = filteredBooks.length 
+                ? `Found ${filteredBooks.length} book(s)` 
+                : 'No books found';
         } else {
             displayBooks(books, 'featured-books');
             displayBooks(books.slice(0, 20), 'bestseller-books');
-            searchMessage.textContent = ''; // Clear the message
+            searchMessage.textContent = '';
         }
     };
 
-    // Search on button click
     searchButton.addEventListener('click', performSearch);
-
-    // Search on Enter key press
-    searchInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            performSearch();
-        }
-    });
+    searchInput.addEventListener('keydown', (e) => e.key === 'Enter' && performSearch());
 }
 
-// Setup mobile menu toggle
-function setupMenuToggle() {
-    const menuToggle = document.getElementById('menu-toggle');
-    const navLinks = document.getElementById('nav-links');
-
-    menuToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-    });
-}
-
-// Pagination
-
+// ====== Pagination ====== //
 let currentPage = 1;
 const booksPerPage = 30;
-const maxVisiblePages = 4; // Number of visible page buttons
 
 async function displayBooksWithPagination() {
     const books = await fetchBooks();
     const totalPages = Math.ceil(books.length / booksPerPage);
-
     const startIndex = (currentPage - 1) * booksPerPage;
-    const endIndex = startIndex + booksPerPage;
-    const booksToDisplay = books.slice(startIndex, endIndex);
-
-    displayBooks(booksToDisplay, 'featured-books');
+    const paginatedBooks = books.slice(startIndex, startIndex + booksPerPage);
+    
+    displayBooks(paginatedBooks, 'featured-books');
     updatePaginationButtons(totalPages);
+    scrollToTop();
 }
 
 function updatePaginationButtons(totalPages) {
     const pageNumbers = document.getElementById('page-numbers');
+    if (!pageNumbers) return;
     pageNumbers.innerHTML = '';
 
-    // Calculate the range of visible page numbers
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-    // Adjust startPage if endPage is at the limit
-    if (endPage - startPage + 1 < maxVisiblePages) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
-
-    // Add "Previous" button
+    // Previous Button
     const prevButton = document.getElementById('prev-page');
-    prevButton.disabled = currentPage === 1;
-
-    // Add page numbers
-    if (startPage > 1) {
-        const firstPageButton = createPageButton(1);
-        pageNumbers.appendChild(firstPageButton);
-
-        if (startPage > 2) {
-            const ellipsis = document.createElement('span');
-            ellipsis.textContent = '...';
-            pageNumbers.appendChild(ellipsis);
-        }
+    if (prevButton) {
+        prevButton.disabled = currentPage === 1;
+        prevButton.onclick = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayBooksWithPagination();
+            }
+        };
     }
 
-    for (let i = startPage; i <= endPage; i++) {
-        const pageButton = createPageButton(i);
-        if (i === currentPage) {
-            pageButton.classList.add('active');
-        }
-        pageNumbers.appendChild(pageButton);
+    // Page Numbers
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.textContent = i;
+        if (i === currentPage) button.classList.add('active');
+        button.addEventListener('click', () => {
+            currentPage = i;
+            displayBooksWithPagination();
+        });
+        pageNumbers.appendChild(button);
     }
 
-    if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-            const ellipsis = document.createElement('span');
-            ellipsis.textContent = '...';
-            pageNumbers.appendChild(ellipsis);
-        }
-
-        const lastPageButton = createPageButton(totalPages);
-        pageNumbers.appendChild(lastPageButton);
-    }
-
-    // Add "Next" button
+    // Next Button
     const nextButton = document.getElementById('next-page');
-    nextButton.disabled = currentPage === totalPages;
-}
-
-function createPageButton(pageNumber) {
-    const button = document.createElement('button');
-    button.textContent = pageNumber;
-    button.addEventListener('click', () => {
-        currentPage = pageNumber;
-        displayBooksWithPagination();
-    });
-    return button;
-}
-
-// Event listeners for "Previous" and "Next" buttons
-document.getElementById('prev-page').addEventListener('click', () => {
-    if (currentPage > 1) {
-        currentPage--;
-        displayBooksWithPagination();
+    if (nextButton) {
+        nextButton.disabled = currentPage === totalPages;
+        nextButton.onclick = () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayBooksWithPagination();
+            }
+        };
     }
-});
-
-document.getElementById('next-page').addEventListener('click', async () => {
-    const books = await fetchBooks();
-    const totalPages = Math.ceil(books.length / booksPerPage);
-
-    if (currentPage < totalPages) {
-        currentPage++;
-        displayBooksWithPagination();
-    }
-});
-
-// Initialize pagination on page load
-document.addEventListener('DOMContentLoaded', () => {
-    displayBooksWithPagination();
-});
-
-// Setup contact form
-function setupContactForm() {
-    const contactForm = document.getElementById('contact-form');
-
-    contactForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const message = document.getElementById('message').value;
-
-        const mailtoLink = `mailto:books.era786@gmail.com?subject=Contact%20Form%20Submission&body=Name:%20${encodeURIComponent(name)}%0AEmail:%20${encodeURIComponent(email)}%0AMessage:%20${encodeURIComponent(message)}`;
-        window.location.href = mailtoLink;
-    });
 }
 
-// Call the function on page load
-document.addEventListener('DOMContentLoaded', () => {
-    setupContactForm();
-});
+// ====== Slider ====== //
+let sliderInterval;
 
-// Function to toggle between light and dark themes
-function setupThemeToggle() {
-    const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
-
-    // Check user's preferred theme from localStorage
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        body.classList.add(savedTheme);
-        updateThemeIcon(savedTheme);
-    }
-
-    themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-theme');
-        const isDarkTheme = body.classList.contains('dark-theme');
-        localStorage.setItem('theme', isDarkTheme ? 'dark-theme' : 'light-theme');
-        updateThemeIcon(isDarkTheme ? 'dark-theme' : 'light-theme');
-    });
-}
-
-// Function to update the theme icon
-function updateThemeIcon(theme) {
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.textContent = theme === 'dark-theme' ? '☀️' : '🌙';
-}
-
-// Call the function on page load
-document.addEventListener('DOMContentLoaded', () => {
-    setupThemeToggle();
-});
-
-//slider
-
-// Fetch books from books.json
-async function fetchBooks() {
-    const response = await fetch('books.json');
-    const data = await response.json();
-    return data;
-}
-
-// Display featured books in the slider
 async function displayFeaturedBooksInSlider() {
     const books = await fetchBooks();
-    const featuredBooks = books.filter(book => book.featured); // Filter featured books
     const slider = document.getElementById('book-slider');
+    if (!slider) return;
 
-    // Clear existing slides
     slider.innerHTML = '';
-
-    // Add featured books to the slider
-    featuredBooks.forEach(book => {
+    books.filter(book => book.featured).forEach(book => {
         const slide = document.createElement('div');
         slide.className = 'slide';
-        slide.innerHTML = `
-            <img src="${book.cover}" alt="${book.title}" data-book-id="${book.id}">
-        `;
+        slide.innerHTML = `<img src="${book.cover}" alt="${book.title}" data-book-id="${book.id}">`;
         slider.appendChild(slide);
     });
 
-    // Clone the first slide and append it to the end
-    const firstSlideClone = slider.firstElementChild.cloneNode(true);
-    slider.appendChild(firstSlideClone);
-
-    // Clone the last slide and prepend it to the beginning
-    const lastSlideClone = slider.lastElementChild.cloneNode(true);
-    slider.insertBefore(lastSlideClone, slider.firstElementChild);
-
-    // Add click event listeners to slides
-    const slides = document.querySelectorAll('.slide img');
-    slides.forEach(slide => {
-        slide.addEventListener('click', () => {
-            const bookId = slide.getAttribute('data-book-id');
+    // Add click events to slides
+    document.querySelectorAll('.slide img').forEach(img => {
+        img.addEventListener('click', (e) => {
+            const bookId = e.target.getAttribute('data-book-id');
             redirectToDownloadPage(bookId);
         });
     });
 
-    // Initialize auto-scrolling
+    // Initialize auto-scroll
+    if (sliderInterval) clearInterval(sliderInterval);
     autoScrollSlider();
 }
 
-// Auto-scroll the slider with seamless infinite loop
 function autoScrollSlider() {
     const slider = document.querySelector('.slider');
-    const slides = document.querySelectorAll('.slide');
-    const totalSlides = slides.length;
-    const slideWidth = slides[0].offsetWidth;
-    let currentIndex = 1; // Start at 1 because the first slide is a clone
+    if (!slider) return;
 
-    // Set initial position to the first real slide
+    const slides = document.querySelectorAll('.slide');
+    if (slides.length === 0) return;
+
+    const slideWidth = slides[0].offsetWidth;
+    let currentIndex = 1;
     slider.style.transform = `translateX(${-slideWidth}px)`;
 
-    setInterval(() => {
-        currentIndex = (currentIndex + 1) % totalSlides;
-        const offset = -currentIndex * slideWidth;
-
-        // Smooth transition
+    sliderInterval = setInterval(() => {
+        currentIndex = (currentIndex + 1) % slides.length;
         slider.style.transition = 'transform 0.5s ease-in-out';
-        slider.style.transform = `translateX(${offset}px)`;
+        slider.style.transform = `translateX(${-currentIndex * slideWidth}px)`;
 
-        // Reset to the first real slide without animation
-        if (currentIndex === totalSlides - 1) {
+        if (currentIndex === slides.length - 1) {
             setTimeout(() => {
                 slider.style.transition = 'none';
                 slider.style.transform = `translateX(${-slideWidth}px)`;
-                currentIndex = 1; // Reset to the first real slide
-            }, 500); // Wait for the transition to complete
+                currentIndex = 1;
+            }, 500);
         }
-    }, 2000); // Change slide every 2 seconds
+    }, 2000);
 }
 
-// Redirect to the download page
-function redirectToDownloadPage(bookId) {
-    window.location.href = `download.html?bookId=${bookId}`;
+// ====== Scroll to Top ====== //
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 }
 
-// Initialize the slider on page load
-document.addEventListener('DOMContentLoaded', () => {
-    displayFeaturedBooksInSlider();
-});
-
-// Back to Top Button Functionality
-document.addEventListener('DOMContentLoaded', () => {
+function setupBackToTopButton() {
     const backToTopButton = document.getElementById('back-to-top');
+    if (!backToTopButton) return;
 
-    // Show or hide the button based on scroll position
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) { // Show the button after scrolling 300px
-            backToTopButton.style.display = 'block';
-        } else {
-            backToTopButton.style.display = 'none';
-        }
+        backToTopButton.style.display = window.scrollY > 300 ? 'block' : 'none';
     });
 
-    // Scroll to the top when the button is clicked
-    backToTopButton.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth' // Smooth scrolling
-        });
+    backToTopButton.addEventListener('click', scrollToTop);
+}
+
+// ====== Theme Toggle ====== //
+function setupThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (!themeToggle) return;
+
+    const body = document.body;
+    const savedTheme = localStorage.getItem('theme');
+    
+    if (savedTheme) {
+        body.classList.add(savedTheme);
+        themeToggle.textContent = savedTheme === 'dark-theme' ? '☀️' : '🌙';
+    }
+
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-theme');
+        const isDark = body.classList.contains('dark-theme');
+        localStorage.setItem('theme', isDark ? 'dark-theme' : 'light-theme');
+        themeToggle.textContent = isDark ? '☀️' : '🌙';
     });
+}
+
+// ====== Initialize Everything ====== //
+document.addEventListener('DOMContentLoaded', async () => {
+    const books = await fetchBooks();
+    displayBooks(books, 'featured-books');
+    displayBooks(books.slice(0, 20), 'bestseller-books');
+    displayBooksWithPagination();
+    displayFeaturedBooksInSlider();
+    
+    updateCategories();
+    setupSearch();
+    setupThemeToggle();
+    setupMenuToggle();
+    setupContactForm();
+    setupBackToTopButton();
 });
+
+// Helper Functions
+function setupMenuToggle() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
+    }
+}
+
+function setupContactForm() {
+    const form = document.getElementById('contact-form');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = encodeURIComponent(document.getElementById('name').value);
+            const email = encodeURIComponent(document.getElementById('email').value);
+            const message = encodeURIComponent(document.getElementById('message').value);
+            window.location.href = `mailto:books.era786@gmail.com?subject=Contact%20Form&body=Name:%20${name}%0AEmail:%20${email}%0AMessage:%20${message}`;
+        });
+    }
+}
