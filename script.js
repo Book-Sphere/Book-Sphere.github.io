@@ -56,10 +56,19 @@ function redirectToReadingPage(bookId) {
     window.location.href = `read.html?bookId=${bookId}`;
 }
 
+let books = []; // Declare books globally
+
+// Load books.json on page load
+fetch("books.json")
+    .then(response => response.json())
+    .then(data => {
+        books = data; // Store books in the global variable
+    })
+    .catch(error => console.error("Error loading books:", error));
+
 function shareBook(bookId) {
-    // Ensure books.json is loaded
-    if (!books || books.length === 0) {
-        alert("Books data is not loaded yet. Please try again.");
+    if (books.length === 0) {
+        alert("Books data is still loading. Please try again.");
         return;
     }
 
@@ -68,15 +77,14 @@ function shareBook(bookId) {
         // Generate the preview link
         const shareUrl = `${window.location.origin}/preview.html?bookId=${book.id}`;
 
-        // Copy to clipboard
+        // Copy link to clipboard
         navigator.clipboard.writeText(shareUrl)
-            .then(() => alert("Link copied! Share it on social media."))
+            .then(() => alert("Link copied! Share it."))
             .catch(err => console.error("Failed to copy: ", err));
     } else {
         alert("Book not found.");
     }
 }
-
     
 function downloadCover(coverUrl, title) {
     fetch(coverUrl)
