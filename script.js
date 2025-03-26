@@ -1,9 +1,17 @@
+const API_BASE_URL = 'https://book-preview-server-kjpg5t1dy-books-projects-80b05c34.vercel.app';
+
 async function fetchBooks() {
     try {
-        if (!response.ok) throw new Error('Failed to fetch books');
-        return await response.json();
+        const response = await fetch(`${API_BASE_URL}/api/books`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('Fetched books:', data); // Debug log
+        return data;
     } catch (error) {
         console.error('Error loading books:', error);
+        // Fallback to empty array if API fails
         return [];
     }
 }
@@ -45,7 +53,7 @@ function createBookCard(book) {
     return bookCard;
 }
 
-fetch('https://book-preview-server-ms2vlkbmi-books-projects-80b05c34.vercel.app/api/books')
+fetch('https://book-preview-server-kjpg5t1dy-books-projects-80b05c34.vercel.app')
   .then(response => response.json())
   .then(data => {
       console.log(data); // Check if data is fetched
@@ -57,7 +65,7 @@ fetch('https://book-preview-server-ms2vlkbmi-books-projects-80b05c34.vercel.app/
 let books = []; // Declare books globally
 
     function shareBook(bookId) {
-        const shareUrl = `https://book-preview-server-ms2vlkbmi-books-projects-80b05c34.vercel.app/preview/${bookId}`;
+        const shareUrl = `https://book-preview-server-kjpg5t1dy-books-projects-80b05c34.vercel.app/${bookId}`;
     
         navigator.clipboard.writeText(shareUrl)
             .then(() => alert("Link copied! Share it."))
