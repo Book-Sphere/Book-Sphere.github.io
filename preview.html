@@ -16,21 +16,25 @@
         document.addEventListener("DOMContentLoaded", function () {
             const urlParams = new URLSearchParams(window.location.search);
             const bookId = urlParams.get("bookId");
-
+    
             if (bookId) {
                 fetch("books.json")
                     .then(response => response.json())
                     .then(books => {
                         const book = books.find(b => b.id == bookId);
                         if (book) {
-                            // Update meta tags for social media preview
+                            // Update Open Graph meta tags for social media preview
                             document.querySelector('meta[property="og:title"]').setAttribute("content", book.title);
                             document.querySelector('meta[property="og:image"]').setAttribute("content", book.cover);
                             document.querySelector('meta[property="og:url"]').setAttribute("content", window.location.href);
                             
-                            // Redirect to the download page if accessed directly
-                            if (!document.referrer.includes("facebook") && !document.referrer.includes("whatsapp")) {
-                                window.location.href = book.downloadLink;
+                            // Check if the user is coming from a social media platform
+                            const referrer = document.referrer.toLowerCase();
+                            const isSocialMedia = referrer.includes("facebook") || referrer.includes("whatsapp") || referrer.includes("twitter") || referrer.includes("linkedin");
+    
+                            // If NOT from social media, redirect to download page
+                            if (!isSocialMedia) {
+                                window.location.href = `download.html?bookId=${book.id}`;
                             }
                         }
                     })
@@ -38,6 +42,7 @@
             }
         });
     </script>
+    
 </head>
 <body>
     <h1>Loading Book Preview...</h1>

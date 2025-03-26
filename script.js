@@ -57,22 +57,26 @@ function redirectToReadingPage(bookId) {
 }
 
 function shareBook(bookId) {
-    const book = books.find(b => b.id === bookId);
+    // Ensure books.json is loaded
+    if (!books || books.length === 0) {
+        alert("Books data is not loaded yet. Please try again.");
+        return;
+    }
+
+    const book = books.find(b => b.id == bookId);
     if (book) {
-        const shareUrl = book.previewLink;
+        // Generate the preview link
+        const shareUrl = `${window.location.origin}/preview.html?bookId=${book.id}`;
+
+        // Copy to clipboard
         navigator.clipboard.writeText(shareUrl)
             .then(() => alert("Link copied! Share it on social media."))
             .catch(err => console.error("Failed to copy: ", err));
+    } else {
+        alert("Book not found.");
     }
 }
 
-
-// Copy link (optional, if needed elsewhere)
-function copyLink(link) {
-    navigator.clipboard.writeText(link)
-        .then(() => alert('Link copied to clipboard!'))
-        .catch(() => alert('Failed to copy link.'));
-}
     
 function downloadCover(coverUrl, title) {
     fetch(coverUrl)
