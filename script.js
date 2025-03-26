@@ -37,7 +37,7 @@ function createBookCard(book) {
             <p class="book-author">by ${book.author}</p>
             <div class="button-container">
                 <button class="download-btn" onclick="window.open('download.html?bookId=${book.id}', '_blank')">Download</button>
-                <button class="share-btn" onclick="shareBook(${book.id})">➥</button>
+                <button class="share-btn" onclick="shareBook('${book.id}')">➥</button>
                 <button class="read-online-btn" onclick="window.open('read.html?bookId=${book.id}', '_blank')">Read online</button>
             </div>
         </div>
@@ -45,6 +45,7 @@ function createBookCard(book) {
 
     return bookCard;
 }
+
 
 // Redirect to the download page
 function redirectToDownloadPage(bookId) {
@@ -55,26 +56,16 @@ function redirectToReadingPage(bookId) {
     window.location.href = `read.html?bookId=${bookId}`;
 }
 
-// Share the download page link
 function shareBook(bookId) {
-    // Generate the download page link dynamically
-    const downloadPageLink = `${window.location.origin}/download.html?bookId=${bookId}`;
-
-    if (navigator.share) {
-        // Use the Web Share API if available
-        navigator.share({
-            title: 'Check out this book!',
-            url: downloadPageLink,
-        })
-            .then(() => console.log('Shared successfully'))
-            .catch((error) => console.error('Error sharing:', error));
-    } else {
-        // Fallback: Copy link to clipboard
-        navigator.clipboard.writeText(downloadPageLink)
-            .then(() => alert('Link copied to clipboard!'))
-            .catch(() => alert('Failed to copy link.'));
+    const book = books.find(b => b.id === bookId);
+    if (book) {
+        const shareUrl = book.previewLink;
+        navigator.clipboard.writeText(shareUrl)
+            .then(() => alert("Link copied! Share it on social media."))
+            .catch(err => console.error("Failed to copy: ", err));
     }
 }
+
 
 // Copy link (optional, if needed elsewhere)
 function copyLink(link) {
