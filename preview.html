@@ -5,51 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Preview</title>
 
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="12 Rules for Life | Self Help | English Books | Motivation">
-    <meta property="og:description" content="Discover this amazing book!">
-    <meta property="og:image" content="img/1.png">
-    <meta property="og:url" content="">
+    <meta property="og:title" content="" id="og-title">
+    <meta property="og:description" content="Read this amazing book!" id="og-desc">
+    <meta property="og:image" content="" id="og-image">
+    <meta property="og:url" content="" id="og-url">
     <meta property="og:type" content="website">
 
-    <!-- Twitter Card Meta Tags (optional, but recommended) -->
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="title">
-    <meta name="twitter:description" content="Discover this amazing book!">
-    <meta name="twitter:image" content="">
+    <meta name="twitter:title" content="" id="twitter-title">
+    <meta name="twitter:description" content="Read this amazing book!" id="twitter-desc">
+    <meta name="twitter:image" content="" id="twitter-image">
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", async function () {
+            // Get book ID from URL
             const urlParams = new URLSearchParams(window.location.search);
-            const bookId = urlParams.get("bookId");
-
-            if (bookId) {
-                fetch("books.json")
-                    .then(response => response.json())
-                    .then(books => {
-                        const book = books.find(b => b.id == bookId);
-                        if (book) {
-                            // Update meta tags dynamically
-                            document.querySelector('meta[property="og:title"]').setAttribute("content", book.title);
-                            document.querySelector('meta[property="og:description"]').setAttribute("content", `Read "${book.title}" online for free.`);
-                            document.querySelector('meta[property="og:image"]').setAttribute("content", book.cover);
-                            document.querySelector('meta[property="og:url"]').setAttribute("content", window.location.href);
-
-                            // Update Twitter Card meta tags
-                            document.querySelector('meta[name="twitter:title"]').setAttribute("content", book.title);
-                            document.querySelector('meta[name="twitter:description"]').setAttribute("content", `Read "${book.title}" online for free.`);
-                            document.querySelector('meta[name="twitter:image"]').setAttribute("content", book.cover);
-
-                            // Redirect to download page if not accessed from social media
-                            if (!document.referrer.includes("facebook") && !document.referrer.includes("whatsapp")) {
-                                window.location.href = book.downloadLink;
-                            }
-                        }
-                    })
-                    .catch(error => console.error("Error fetching book data:", error));
+            const bookId = urlParams.get("id"); // Assuming URL is like preview.html?id=1
+    
+            // Fetch books.json
+            try {
+                const response = await fetch("books.json"); // Make sure this file is accessible
+                const books = await response.json();
+    
+                // Find the book with matching ID
+                const book = books.find(b => b.id == bookId);
+    
+                // If book exists, update meta tags
+                if (book) {
+                    document.querySelector("meta[property='og:title']").setAttribute("content", book.title);
+                    document.querySelector("meta[property='og:image']").setAttribute("content", book.cover);
+                    document.querySelector("meta[property='og:url']").setAttribute("content", window.location.href);
+                    document.querySelector("meta[name='twitter:title']").setAttribute("content", book.title);
+                    document.querySelector("meta[name='twitter:image']").setAttribute("content", book.cover);
+                }
+            } catch (error) {
+                console.error("Error loading books.json:", error);
             }
         });
     </script>
+    
 </head>
 <body>
     <h1>Loading Book Preview...</h1>
