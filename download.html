@@ -270,6 +270,39 @@ document.querySelector('.link-btn3').onclick = () => {
     }
 };
 
+async function loadBookPreview() {
+    const params = new URLSearchParams(window.location.search);
+    const bookId = params.get("bookId");
+
+    if (!bookId) {
+      document.body.innerHTML = "<h2>Invalid Book ID</h2>";
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://book-preview-server-ms2vlkbmi-books-projects-80b05c34.vercel.app/api/books/${bookId}`);
+      const book = await response.json();
+
+      document.title = book.title;
+      document.querySelector(".title").innerText = book.title;
+      document.querySelector(".book-cover").src = book.cover;
+      
+      // Update download button link
+      document.querySelector(".download .link-btn3").onclick = () => {
+          window.open(book.downloadLink, "_blank");
+      };
+
+      // Open Graph Meta Tags for Social Media Preview
+      document.querySelector('meta[property="og:title"]').setAttribute("content", book.title);
+      document.querySelector('meta[property="og:image"]').setAttribute("content", book.cover);
+      document.querySelector('meta[property="og:description"]').setAttribute("content", book.description || "Free book available on Book Sphere.");
+    } catch (error) {
+      console.error("Error fetching book:", error);
+    }
+  }
+
+  window.onload = loadBookPreview;
+
  // Setup back to top/bottom buttons
  function setupScrollButtons() {
             const backToTop = document.getElementById('back-to-top');

@@ -1,6 +1,5 @@
 async function fetchBooks() {
     try {
-        const response = await fetch('./books.json'); // Changed to absolute path
         if (!response.ok) throw new Error('Failed to fetch books');
         return await response.json();
     } catch (error) {
@@ -46,45 +45,27 @@ function createBookCard(book) {
     return bookCard;
 }
 
+fetch('https://book-preview-server-ms2vlkbmi-books-projects-80b05c34.vercel.app/api/books')
+  .then(response => response.json())
+  .then(data => {
+      console.log(data); // Check if data is fetched
+      // Use this data to populate books dynamically
+  })
+  .catch(error => console.error('Error:', error));
 
-// Redirect to the download page
-function redirectToDownloadPage(bookId) {
-    window.location.href = `download.html?bookId=${bookId}`;
-}
-
-function redirectToReadingPage(bookId) {
-    window.location.href = `read.html?bookId=${bookId}`;
-}
 
 let books = []; // Declare books globally
 
-// Load books.json on page load
-fetch("books.json")
-    .then(response => response.json())
-    .then(data => {
-        books = data; // Store books in the global variable
-    })
-    .catch(error => console.error("Error loading books:", error));
-
-function shareBook(bookId) {
-    if (books.length === 0) {
-        alert("Books data is still loading. Please try again.");
-        return;
-    }
-
-    const book = books.find(b => b.id == bookId);
-    if (book) {
-        // Generate the preview link
-        const shareUrl = `${window.location.origin}/preview.html?bookId=${book.id}`;
-
-        // Copy link to clipboard
+    function shareBook(bookId) {
+        const shareUrl = `https://book-preview-server-ms2vlkbmi-books-projects-80b05c34.vercel.app/preview/${bookId}`;
+    
         navigator.clipboard.writeText(shareUrl)
             .then(() => alert("Link copied! Share it."))
             .catch(err => console.error("Failed to copy: ", err));
-    } else {
-        alert("Book not found.");
     }
-}
+    
+    
+
     
 function downloadCover(coverUrl, title) {
     fetch(coverUrl)
