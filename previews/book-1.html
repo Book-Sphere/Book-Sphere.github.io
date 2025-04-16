@@ -11,5 +11,15 @@
 </head>
 <body>
   <p>Redirecting to download page...</p>
+  <script>
+    // Get the filename without extension
+    const path = window.location.pathname;
+    const fileName = path.substring(path.lastIndexOf('/') + 1);
+    const bookId = fileName.split('.')[0]; // book-1
+  
+    // Redirect to download page with book ID
+    window.location.href = `/download.html?id=${bookId}`;
+  </script>
+  
 </body>
 </html>
