@@ -456,24 +456,37 @@ document.addEventListener('DOMContentLoaded', () => {
     displayFeaturedBooksInSlider();
 });
 
-// Back to Top Button Functionality
-document.addEventListener('DOMContentLoaded', () => {
-    const backToTopButton = document.getElementById('back-to-top');
-
-    // Show or hide the button based on scroll position
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) { // Show the button after scrolling 300px
-            backToTopButton.style.display = 'block';
-        } else {
-            backToTopButton.style.display = 'none';
-        }
+// ====== Scroll Management ====== //
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
     });
+}
 
-    // Scroll to the top when the button is clicked
-    backToTopButton.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth' // Smooth scrolling
+function setupScrollButtons() {
+    const backToTop = document.getElementById('back-to-top');
+    const backToBottom = document.getElementById('back-to-bottom');
+
+    if (backToTop) {
+        window.addEventListener('scroll', () => {
+            backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
         });
-    });
+        backToTop.addEventListener('click', scrollToTop);
+    }
+
+    if (backToBottom) {
+        window.addEventListener('scroll', () => {
+            const scrolledToBottom = (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100;
+            backToBottom.style.display = scrolledToBottom ? 'none' : 'block';
+        });
+        backToBottom.addEventListener('click', () => {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setupScrollButtons(); // <- Add this!
 });
+
