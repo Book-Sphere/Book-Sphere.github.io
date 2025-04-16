@@ -44,7 +44,7 @@ function createBookCard(book) {
             <p class="book-author">by ${book.author}</p>
             <div class="button-container">
                 <button class="download-btn" onclick="window.open('download.html?bookId=${book.id}', '_blank')">Download</button>
-                <button class="share-btn" onclick="shareBook(${book.id})">➥</button>
+                <button class="share-btn " onclick="shareBook(${book.id})">➥</button>
                 <button class="read-online-btn" onclick="window.open('read.html?bookId=${book.id}', '_blank')">Read online</button>
             </div>
         </div>
@@ -64,24 +64,22 @@ function redirectToReadingPage(bookId) {
 
 // Share the download page link
 function shareBook(bookId) {
-    // Generate the download page link dynamically
-    const downloadPageLink = `${window.location.origin}/download.html?bookId=${bookId}`;
+    const previewPageLink = `${window.location.origin}/previews/book-${bookId}.html`;
 
     if (navigator.share) {
-        // Use the Web Share API if available
         navigator.share({
             title: 'Check out this book!',
-            url: downloadPageLink,
+            url: previewPageLink,
         })
-            .then(() => console.log('Shared successfully'))
-            .catch((error) => console.error('Error sharing:', error));
+        .then(() => console.log('Shared successfully'))
+        .catch((error) => console.error('Error sharing:', error));
     } else {
-        // Fallback: Copy link to clipboard
-        navigator.clipboard.writeText(downloadPageLink)
+        navigator.clipboard.writeText(previewPageLink)
             .then(() => alert('Link copied to clipboard!'))
             .catch(() => alert('Failed to copy link.'));
     }
 }
+
 
 // Copy link (optional, if needed elsewhere)
 function copyLink(link) {
