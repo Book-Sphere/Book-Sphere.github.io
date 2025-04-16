@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Reading | BookSphere</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3325043025817377"
+        crossorigin="anonymous"></script>
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -29,51 +33,51 @@
                 <div class="menu-toggle" id="menu-toggle">☰</div>
                 <script>
                     // Function to toggle the mobile menu
-function setupMenuToggle() {
-    const menuToggle = document.getElementById('menu-toggle');
-    const navLinks = document.getElementById('nav-links');
+                    function setupMenuToggle() {
+                        const menuToggle = document.getElementById('menu-toggle');
+                        const navLinks = document.getElementById('nav-links');
 
-    if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-    } else {
-        console.error('Menu toggle or nav links element not found!');
-    }
-}
+                        if (menuToggle && navLinks) {
+                            menuToggle.addEventListener('click', () => {
+                                navLinks.classList.toggle('active');
+                            });
+                        } else {
+                            console.error('Menu toggle or nav links element not found!');
+                        }
+                    }
 
-// Function to toggle between light and dark themes
-function setupThemeToggle() {
-    const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
+                    // Function to toggle between light and dark themes
+                    function setupThemeToggle() {
+                        const themeToggle = document.getElementById('theme-toggle');
+                        const body = document.body;
 
-    // Check user's preferred theme from localStorage
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        body.classList.add(savedTheme);
-        updateThemeIcon(savedTheme);
-    }
+                        // Check user's preferred theme from localStorage
+                        const savedTheme = localStorage.getItem('theme');
+                        if (savedTheme) {
+                            body.classList.add(savedTheme);
+                            updateThemeIcon(savedTheme);
+                        }
 
-    // Toggle theme on button click
-    themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-theme');
-        const isDarkTheme = body.classList.contains('dark-theme');
-        localStorage.setItem('theme', isDarkTheme ? 'dark-theme' : 'light-theme');
-        updateThemeIcon(isDarkTheme ? 'dark-theme' : 'light-theme');
-    });
-}
+                        // Toggle theme on button click
+                        themeToggle.addEventListener('click', () => {
+                            body.classList.toggle('dark-theme');
+                            const isDarkTheme = body.classList.contains('dark-theme');
+                            localStorage.setItem('theme', isDarkTheme ? 'dark-theme' : 'light-theme');
+                            updateThemeIcon(isDarkTheme ? 'dark-theme' : 'light-theme');
+                        });
+                    }
 
-// Function to update the theme icon
-function updateThemeIcon(theme) {
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.textContent = theme === 'dark-theme' ? '☀️' : '🌙';
-}
+                    // Function to update the theme icon
+                    function updateThemeIcon(theme) {
+                        const themeToggle = document.getElementById('theme-toggle');
+                        themeToggle.textContent = theme === 'dark-theme' ? '☀️' : '🌙';
+                    }
 
-// Call the functions on page load
-document.addEventListener('DOMContentLoaded', () => {
-    setupMenuToggle(); // Initialize the menu toggle
-    setupThemeToggle(); // Initialize the theme toggle
-});
+                    // Call the functions on page load
+                    document.addEventListener('DOMContentLoaded', () => {
+                        setupMenuToggle(); // Initialize the menu toggle
+                        setupThemeToggle(); // Initialize the theme toggle
+                    });
                 </script>
             </nav>
         </div>
@@ -107,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     </div>
     <h2 class="section-title">✨ Featured Books</h2>
-        
+
     <div class="books-grid" id="featured-books">
         <!-- Books will be loaded here from JS -->
     </div>
@@ -117,7 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="footer-content">
                 <div class="footer-section" id="about">
                     <h3 class="footer-title">About BookSphere</h3>
-                    <p>We're passionate about books and connecting readers with their next great read. Our mission is to make book discovery easy and enjoyable.</p>
+                    <p>We're passionate about books and connecting readers with their next great read. Our mission is to
+                        make book discovery easy and enjoyable.</p>
                 </div>
                 <div class="footer-section">
                     <h3 class="footer-title" id="contactus">Contact Us</h3>
@@ -137,7 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <br>
                         <a href="https://www.facebook.com/share/g/1ERrACB9KU/">Facebook</a>
                         <br>
-                        <a href="https://www.reddit.com/user/Competitive_Wash_629/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button">Reddit</a>
+                        <a
+                            href="https://www.reddit.com/user/Competitive_Wash_629/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button">Reddit</a>
                         <br>
                         <a href="mailto:books.era786@gmail.com">G-mail</a>
                     </ul>
@@ -208,4 +214,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <script src="script.js"></script>
 </body>
+
 </html>

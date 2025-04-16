@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
     <link rel="stylesheet" href="style.css">
     <title>Download Page</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3325043025817377"
+        crossorigin="anonymous"></script>
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -32,7 +37,7 @@
                     function setupMenuToggle() {
                         const menuToggle = document.getElementById('menu-toggle');
                         const navLinks = document.getElementById('nav-links');
-                    
+
                         if (menuToggle && navLinks) {
                             menuToggle.addEventListener('click', () => {
                                 navLinks.classList.toggle('active');
@@ -41,7 +46,7 @@
                             console.error('Menu toggle or nav links element not found!');
                         }
                     }
-                    
+
                     // Call the function on page load
                     document.addEventListener('DOMContentLoaded', () => {
                         setupMenuToggle();
@@ -57,23 +62,31 @@
         <h3 class="quote">BookSphere provides you the free PDF books. Click below to download.</h3>
         <div class="buttons">
 
-        <h2>JOIN OUR WHATSAPP GROUP</h2>
+            <h2>JOIN OUR WHATSAPP GROUP</h2>
             <div class="whatsapp">
-                <a href="https://www.whatsapp.com/channel/0029Vb5vL9LDuMRmc0mNvs3T"><button class="link-btn1"><h3>Whatsapp Channel</h3></button></a>
+                <a href="https://www.whatsapp.com/channel/0029Vb5vL9LDuMRmc0mNvs3T"><button class="link-btn1">
+                        <h3>Whatsapp Channel</h3>
+                    </button></a>
             </div>
 
             <h2>Join Our Facebook Group</h2>
             <div class="facebook">
-                <a href="https://www.facebook.com/groups/1438827183755412"><button class="link-btn2"><h3>Facebook Group</h3></button></a>
+                <a href="https://www.facebook.com/groups/1438827183755412"><button class="link-btn2">
+                        <h3>Facebook Group</h3>
+                    </button></a>
             </div>
 
             <h2>Click Here to Download PDF</h2>
             <div class="download">
-                <button class="link-btn3"><h3>Click Here to Download PDF</h3></button>
-            <div class="n-box" style="border: 1px solid; margin-top: 10px;">
-                <b><p class="k" style="color: red; padding-top: 5px;">⚠ Note:</p></b>
-                <p class="note"> The PDF file will open automatically after 10 seconds after clicking.</p>
-            </div>
+                <button class="link-btn3">
+                    <h3>Click Here to Download PDF</h3>
+                </button>
+                <div class="n-box" style="border: 1px solid; margin-top: 10px;">
+                    <b>
+                        <p class="k" style="color: red; padding-top: 5px;">⚠ Note:</p>
+                    </b>
+                    <p class="note"> The PDF file will open automatically after 10 seconds after clicking.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -99,9 +112,9 @@
             <div class="category" id="Education">Education</div>
         </div>
     </div>
-    
+
     <h2 class="section-title">✨ Featured Books</h2>
-    
+
     <div class="books-grid" id="featured-books">
         <!-- Books will be loaded here from JS -->
     </div>
@@ -117,7 +130,8 @@
             <div class="footer-content">
                 <div class="footer-section" id="about">
                     <h3 class="footer-title">About BookSphere</h3>
-                    <p>We're passionate about books and connecting readers with their next great read. Our mission is to make book discovery easy and enjoyable.</p>
+                    <p>We're passionate about books and connecting readers with their next great read. Our mission is to
+                        make book discovery easy and enjoyable.</p>
                 </div>
                 <div class="footer-section">
                     <h3 class="footer-title" id="contactus">Contact Us</h3>
@@ -137,7 +151,8 @@
                         <br>
                         <a href="https://www.facebook.com/share/g/1ERrACB9KU/">Facebook</a>
                         <br>
-                        <a href="https://www.reddit.com/user/Competitive_Wash_629/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button">Reddit</a>
+                        <a
+                            href="https://www.reddit.com/user/Competitive_Wash_629/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button">Reddit</a>
                         <br>
                         <a href="mailto:books.era786@gmail.com">G-mail</a>
                     </ul>
@@ -194,8 +209,8 @@
 
             // Set up the download button
             document.querySelector('.link-btn3').onclick = () => {
-    startDownloadTimer(book.downloadLink);
-};
+                startDownloadTimer(book.downloadLink);
+            };
         }
 
         // Start the download timer
@@ -224,66 +239,66 @@
         document.addEventListener('DOMContentLoaded', displaySelectedBook);
 
         let clickCount = 0;
-let isTimerRunning = false; // Flag to check if a timer is already running
+        let isTimerRunning = false; // Flag to check if a timer is already running
 
-function startDownloadTimer(downloadLink) {
-    if (isTimerRunning) {
-        return; // Exit if a timer is already running
-    }
+        function startDownloadTimer(downloadLink) {
+            if (isTimerRunning) {
+                return; // Exit if a timer is already running
+            }
 
-    clickCount++;
-    if (clickCount >= 3) {
-        showPopup(downloadLink);
-        return;
-    }
+            clickCount++;
+            if (clickCount >= 3) {
+                showPopup(downloadLink);
+                return;
+            }
 
-    isTimerRunning = true; // Set the flag to true
-    let timer = 10;
-    const timerElement = document.createElement('div');
-    timerElement.textContent = `Download will start in ${timer} seconds...`;
-    document.querySelector('.buttons').appendChild(timerElement);
+            isTimerRunning = true; // Set the flag to true
+            let timer = 10;
+            const timerElement = document.createElement('div');
+            timerElement.textContent = `Download will start in ${timer} seconds...`;
+            document.querySelector('.buttons').appendChild(timerElement);
 
-    const interval = setInterval(() => {
-        timer--;
-        timerElement.textContent = `Download will start in ${timer} seconds...`;
+            const interval = setInterval(() => {
+                timer--;
+                timerElement.textContent = `Download will start in ${timer} seconds...`;
 
-        if (timer <= 0) {
-            clearInterval(interval);
-            window.open(downloadLink, '_blank');
-            timerElement.remove();
-            isTimerRunning = false; // Reset the flag after the timer ends
+                if (timer <= 0) {
+                    clearInterval(interval);
+                    window.open(downloadLink, '_blank');
+                    timerElement.remove();
+                    isTimerRunning = false; // Reset the flag after the timer ends
+                }
+            }, 1000);
         }
-    }, 1000);
-}
 
-function showPopup(downloadLink) {
-    const popup = document.createElement('div');
-    popup.className = 'popup';
-    popup.innerHTML = `
+        function showPopup(downloadLink) {
+            const popup = document.createElement('div');
+            popup.className = 'popup';
+            popup.innerHTML = `
         <div class="popup-content">
             <p>If the download is not started, <a href="${downloadLink}" target="_blank">click here to download</a>.</p>
             <button onclick="closePopup()">Close</button>
         </div>
     `;
-    document.body.appendChild(popup);
-}
+            document.body.appendChild(popup);
+        }
 
-function closePopup() {
-    const popup = document.querySelector('.popup');
-    if (popup) {
-        popup.remove();
-    }
-}
+        function closePopup() {
+            const popup = document.querySelector('.popup');
+            if (popup) {
+                popup.remove();
+            }
+        }
 
-// Update the download button event listener
-document.querySelector('.link-btn3').onclick = () => {
-    const bookId = getQueryParam('bookId');
-    if (bookId) {
-        fetchBookById(bookId).then(book => {
-            startDownloadTimer(book.downloadLink);
-        });
-    }
-};
+        // Update the download button event listener
+        document.querySelector('.link-btn3').onclick = () => {
+            const bookId = getQueryParam('bookId');
+            if (bookId) {
+                fetchBookById(bookId).then(book => {
+                    startDownloadTimer(book.downloadLink);
+                });
+            }
+        };
     </script>
 
     <button id="back-to-top" title="Go to top">↑</button>
@@ -291,4 +306,5 @@ document.querySelector('.link-btn3').onclick = () => {
     <script src="script.js"></script>
 
 </body>
+
 </html>
