@@ -7,19 +7,9 @@
   <meta property="og:description" content="By Jordan B Peterson" />
   <meta property="og:image" content="https://i.postimg.cc/RFL9NrqG/1.jpg" />
   <meta property="og:url" content="https://yourdomain.com/previews/book-1.html" />
-  <meta http-equiv="refresh" content="0; URL=../download.html?id=1" />
+  <meta http-equiv="refresh" content="0; URL=../download.html?bookId=1" />
 </head>
 <body>
   <p>Redirecting to download page...</p>
-  <script>
-    // Get the filename without extension
-    const path = window.location.pathname;
-    const fileName = path.substring(path.lastIndexOf('/') + 1);
-    const bookId = fileName.split('.')[0]; // book-1
-  
-    // Redirect to download page with book ID
-    window.location.href = `/download.html?id=${bookId}`;
-  </script>
-  
 </body>
 </html>

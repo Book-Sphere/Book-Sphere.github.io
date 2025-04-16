@@ -193,10 +193,9 @@
             document.querySelector('.download-book .quote').textContent = `BookSphere provides you the free PDF of "${book.title}". Click below to download.`;
 
             // Set up the download button
-            const downloadButton = document.getElementById('download-button');
-            downloadButton.onclick = () => {
-                startDownloadTimer(book.downloadLink);
-            };
+            document.querySelector('.link-btn3').onclick = () => {
+    startDownloadTimer(book.downloadLink);
+};
         }
 
         // Start the download timer
