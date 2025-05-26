@@ -839,6 +839,16 @@ footer {
     background-color: #818cf8;
 }
 
+.sponsored button {
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 @media (max-width: 768px) {
     .nav-links {
         display: none;
@@ -1161,7 +1171,7 @@ footer {
 
     body.dark-theme .nav-links a:hover,
     body.dark-theme .footer-links a:hover {
-        color: var(--black);
+        color: var(--primary);
     }
 
     body.dark-theme .search-bar input {
